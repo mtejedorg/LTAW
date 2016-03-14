@@ -20,6 +20,10 @@ p.def 	{
 	font-size: 100%;
 }
 
+ul#menu li	{
+	display:inline;
+}
+
 table, th, td	{
 	width:100%;
 	border: 2px solid black;
