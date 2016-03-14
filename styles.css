@@ -11,6 +11,53 @@ p 	{
 	font-size: 150%;
 }
 
+p.def 	{
+	border: 0px solid black;
+	padding: 0px;
+	margin: 0px;
+	color:black;
+	font-family:courier;
+	font-size: 100%;
+}
+
+table, th, td	{
+	width:100%;
+	border: 2px solid black;
+	border-collapse:collapse;
+	border-spacing: 5px;		// No effect when collapsing
+}
+
+th, td	{
+	border: 1px solid black;
+	padding:15px;
+	text-align: center;
+}
+
+th	{
+	text-align:left;
+}
+
+a:link {
+    color: green;
+    background-color: transparent;
+    text-decoration: none;
+}
+a:visited {
+    color: blue;
+    background-color: transparent;
+    text-decoration: none;
+}
+a:hover {
+    color: red;
+    background-color: transparent;
+    text-decoration: underline;
+}
+a:active {
+    color: yellow;
+    background-color: transparent;
+    text-decoration: underline;
+}
+
 #code1	{
 	color:brown;
 }
