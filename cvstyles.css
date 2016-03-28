@@ -5,13 +5,6 @@ body {
     margin: auto;
 }
 
-img#principal {
-    float: right;
-    margin-top: 3%;
-    margin-right: 5%;
-    width: 40%;
-}
-
 header {
     background-color: black;
     font-family: courier;
@@ -20,3 +13,73 @@ header {
     color: white;
 }
 
+section {
+    width: 126mm;
+    border: 1px solid black;
+    margin: 0px;
+}
+
+aside {
+    border: 1px solid black;
+    float: right;
+    width: 84mm;
+    margin: 0px;
+}
+
+img#principal {
+    width: 100%;
+}
+
+#cartel {
+    background-color: #333333;
+    float:  left;
+    margin: 0px;
+    margin-top: -2mm;
+    margin-left: 20%;
+    color: white;
+    font-size: 150%;
+    padding: 3px;
+}
+
+#cartel2 {
+    background-color: white;
+    float:  left;
+    margin: 0px;
+    margin-top: -2mm;
+    margin-left: 20%;
+    color: #333333;
+    font-size: 150%;
+    padding: 3px;
+}
+
+.cartelaside {
+    background-color: #333333;
+    float:  right;
+    margin: 0px;
+    margin-right: 20%;
+    margin-top: -2mm;
+    color: white;
+    font-size: 150%;
+    padding: 3px;
+}
+
+.item {
+    background-color:  white;
+    border: 1px solid black;
+    margin: 5mm;
+    padding: 4%;
+    padding-top: 6%;
+    text-align: justify;
+    font-size: 110%;
+}
+
+.item2 {
+    background-color: #333333;
+    color: white;
+    border: 1px solid black;
+    margin: 5mm;
+    padding: 4%;
+    padding-top: 3mm;
+    text-align: justify;
+    font-size: 110%;
+}
