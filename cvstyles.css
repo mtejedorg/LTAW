@@ -2,6 +2,7 @@ body {
     background-color: lightgray;
     width: 210mm;
     height: 290mm;
+    margin: auto;
 }
 
 img#principal {
