@@ -3,38 +3,67 @@ body {
     width: 210mm;
     height: 290mm;
     margin: auto;
+    padding: 0px;
 }
 
 header {
     background-color: black;
     font-family: courier;
-    padding: 10px;
     font-size: 150%;
     color: white;
+    height: 23.5mm;
+    width: 190mm;
+    padding: 10mm;
 }
 
 section {
     width: 126mm;
-    border: 1px solid black;
+    height: 226.5mm;
     margin: 0px;
+    padding: 0px;
 }
 
 aside {
-    border: 1px solid black;
     float: right;
+    height: 246mm;
     width: 84mm;
     margin: 0px;
+    padding: 0px;
+}
+
+footer {
+    background-color: black;
+    clear: both;
+    font-family: courier;
+    color: white;
+    height: 10mm;
+    width: 200mm;
+    padding: 5mm;
+}
+
+h1 {
+    margin: 0px;
+    padding: 0px;
+}
+
+h5 {
+    margin: 0px;
+    padding: 0px;
 }
 
 img#principal {
-    width: 100%;
+    width: 95%;
+    text-align: left;
+    margin: 0px;
+    margin-bottom: 8mm;
+    margin-right: 5mm;
 }
 
 #cartel {
     background-color: #333333;
     float:  left;
     margin: 0px;
-    margin-top: -2mm;
+    margin-top: -1.5mm;
     margin-left: 20%;
     color: white;
     font-size: 150%;
@@ -45,7 +74,7 @@ img#principal {
     background-color: white;
     float:  left;
     margin: 0px;
-    margin-top: -2mm;
+    margin-top: -1.5mm;
     margin-left: 20%;
     color: #333333;
     font-size: 150%;
@@ -53,13 +82,13 @@ img#principal {
 }
 
 .cartelaside {
-    background-color: #333333;
-    float:  right;
+    text-align: center;
+    width: auto;
     margin: 0px;
-    margin-right: 20%;
-    margin-top: -2mm;
-    color: white;
-    font-size: 150%;
+    margin-right: 5mm;
+    color: Darkblue;
+    font-family: Gabriola;
+    font-size: 200%;
     padding: 3px;
 }
 
@@ -67,10 +96,10 @@ img#principal {
     background-color:  white;
     border: 1px solid black;
     margin: 5mm;
-    padding: 4%;
+    margin-top: 8mm;
+    padding: 3.5%;
     padding-top: 6%;
     text-align: justify;
-    font-size: 110%;
 }
 
 .item2 {
@@ -78,8 +107,18 @@ img#principal {
     color: white;
     border: 1px solid black;
     margin: 5mm;
-    padding: 4%;
+    margin-top: 8mm;
+    padding: 3.5%;
     padding-top: 3mm;
     text-align: justify;
-    font-size: 110%;
+}
+
+.itemaside {
+    background-color: #333333;
+    color: white;
+    margin: 0px;
+    margin-right: 5mm;
+    padding: 1%;
+    border: 1px solid black;
+    text-align: justify;
 }
