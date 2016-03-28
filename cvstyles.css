@@ -1,0 +1,21 @@
+body {
+    background-color: lightgray;
+    width: 210mm;
+    height: 290mm;
+}
+
+img#principal {
+    float: right;
+    margin-top: 3%;
+    margin-right: 5%;
+    width: 40%;
+}
+
+header {
+    background-color: black;
+    font-family: courier;
+    padding: 10px;
+    font-size: 150%;
+    color: white;
+}
+
