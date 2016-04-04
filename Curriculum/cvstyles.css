@@ -1,5 +1,9 @@
 body {
     background-color: lightgray;
+	background-image: -webkit-gradient(radial, 50% 50%, 0, 50% 50%,800, from(white), to(#333)); 	/*Safari 5.1-6*/
+    background-image: -o-radial-gradient(center 45deg, white, #333); 								/*Opera 11.1-12*/
+    background-image: -moz-radial-gradient(center 45deg,circle cover, white, #333); 				/*Fx 3.6-15*/
+	background-image: radial-gradient(center 45deg,circle cover, white, #333);						/*Standard*/
     width: 210mm;
     height: 290mm;
     margin: auto;
@@ -7,7 +11,11 @@ body {
 }
 
 header {
-    background-color: black;
+    background-color: black; /* For browsers that do not support gradients */
+	background: -webkit-linear-gradient(top left,rgba(0,0,0,1),rgba(0,0,0,0.8),rgba(0,0,0,0)); /*Safari 5.1-6*/
+	background: -o-linear-gradient(top left,rgba(0,0,0,1),rgba(0,0,0,0.8),rgba(0,0,0,0)); /*Opera 11.1-12*/
+	background: -moz-linear-gradient(top left,rgba(0,0,0,1),rgba(0,0,0,0.8),rgba(0,0,0,0)); /*Fx 3.6-15*/
+	background: linear-gradient(to bottom right, rgba(0,0,0,1),rgba(0,0,0,0.8), rgba(0,0,0,0)); /*Standard*/
     font-family: courier;
     font-size: 150%;
     color: white;
