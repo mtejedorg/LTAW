@@ -132,3 +132,8 @@ img#principal {
     border: 1px solid black;
     text-align: justify;
 }
+
+table, td {
+    border: 1px solid white;
+    border-spacing: 2px;
+}
