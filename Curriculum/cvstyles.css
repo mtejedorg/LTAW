@@ -137,3 +137,8 @@ table, td {
     border: 1px solid white;
     border-spacing: 2px;
 }
+
+a:link    {color:white; background-color:transparent; text-decoration:none}
+a:visited {color:white; background-color:transparent; text-decoration:none}
+a:hover   {color:white; background-color:transparent; text-decoration:underline}
+a:active  {color:blue; background-color:transparent; text-decoration:underline}
