@@ -32,6 +32,20 @@ var gameArea =
         this.gameContext.fillRect(x, y, width, height);
     },
 
+    drawCircle: function (x, y, color, big)
+    {
+        y = parseInt(y);
+        x = parseInt(x);
+        this.gameContext.fillStyle = color;
+        x = x * this.blockSize.width + this.blockSize.width/2;
+        y = y * this.blockSize.height + this.blockSize.height/2;
+        var size = Math.min(this.blockSize.width,this.blockSize.height)/6;
+        if (big){size = 2*size};
+        this.gameContext.beginPath();
+        this.gameContext.arc(x, y, size, 0, 2*Math.PI);
+        this.gameContext.fill();
+    },
+
     isNotBorder: function (x,y)
     {
         var ans = 0<=y && y<this.map.length;
@@ -71,7 +85,11 @@ var gameArea =
         }
     },
 
-    drawBiscuit: function (x, y) { this.drawRect(x, y, "yellow") },
+    drawBiscuit: function (x, y, big) {
+        this.drawEmpty(x, y);   //First, we draw an empty background;
+        this.drawCircle(x,y,"yellow",big);
+    },
+
     drawEmpty: function (x, y) { this.drawRect(x, y, "black") },
     drawBlock: function (x, y) { this.drawWall(x, y) },
     drawFruit: function (x, y) { this.drawRect(x, y, "red") },
@@ -84,16 +102,19 @@ var gameArea =
                 this.drawWall(x, y);
                 break;
             case 1:                         //Biscuit
-                this.drawBiscuit(x, y);
+                this.drawBiscuit(x, y, false);
                 break;
             case 2:                         //Empty
-                this.drawEmpty(x, y);
+                //this.drawEmpty(x, y);
                 break;
             case 3:                         //Block
-                this.drawBlock(x, y);
+                //this.drawBlock(x, y);
                 break;
             case 4:                         //Fruit
-                this.drawFruit(x, y);
+                this.drawBiscuit(x, y, true);
+                break;
+            case 5:
+                //sthis.drawFruit(x,y);
                 break;
             default:
                 throw "Not contempled number in Map";
@@ -102,6 +123,7 @@ var gameArea =
 
     drawScenary: function ()
     {
+        this.clear();
         /* Refresh every time, just in case it has changed */
         this.blockSize.width = this.gameCanvas.width / this.map[0].length;
         this.blockSize.height = this.gameCanvas.height / this.map.length;
@@ -123,7 +145,8 @@ var gameArea =
     BISCUIT = 1;
     EMPTY   = 2;
     BLOCK   = 3;
-    FRUIT   = 4;
+    PILL    = 4;
+    FRUIT   = 5;
 
     MAP = [
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
