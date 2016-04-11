@@ -15,6 +15,9 @@ var gameArea =
         this.map = map;
         scenary.init(this.gameCanvas, this.gameContext, this.blockSize, map);
         pacMan.init(this.gameCanvas, this.gameContext, this.blockSize, map, 9, 12);
+        window.addEventListener('keydown', function (e) {
+            gameArea.key = e.keyCode;
+        });
     },
 
     create: function ()
@@ -40,7 +43,12 @@ var gameArea =
 
         scenary.update(this.map, this.blockSize)
         scenary.draw();
-
+        
+		if (this.key && this.key == 37) {pacMan.nextDirection.x = -1; pacMan.nextDirection.y = 0;}
+		if (this.key && this.key == 39) {pacMan.nextDirection.x = 1; pacMan.nextDirection.y = 0;}
+		if (this.key && this.key == 38) {pacMan.nextDirection.x = 0; pacMan.nextDirection.y = -1;}
+		if (this.key && this.key == 40) {pacMan.nextDirection.x = 0; pacMan.nextDirection.y = 1;}
+		
         pacMan.updatePos();
         pacMan.draw();
 
@@ -94,8 +102,8 @@ var scenary =
     },
 
     isNotBorder: function (x,y) {
-        var ans = 0<=y && y<this.map.length;
-        ans = ans && 0<=x && x<this.map[0].length;
+        var ans = 0 <= y && y < this.map.length;
+        ans = ans && 0 <= x && x < this.map[0].length;
         return ans;
     },
 
@@ -192,7 +200,8 @@ var pacMan =
     close: false,
     color: "yellow",
     rotation: Math.PI/4,
-    direction: {x:1, y:0},
+    direction: {x:0, y:0},
+    nextDirection: {x:0, y:0},
 
     init: function(canvas, context, blocksize, map, x , y)
     {
@@ -200,6 +209,12 @@ var pacMan =
         this.context = context;
         this.blockSize = blocksize;
         this.map = map;
+        this.direction.x = 0;
+        this.direction.y = 0;
+        this.nextDirection.x = 0;
+        this.nextDirection.y = 0;
+        this.positionoffset.x = 0;
+        this.positionoffset.y = 0;
         this.position.x = x;
         this.position.y = y;
     },
@@ -209,18 +224,87 @@ var pacMan =
         this.blockSize = blocksize;
         this.map = map;
     },
+    
+    nextBlock: function(direction){
+		x = this.position.x + direction.x;
+		y = this.position.y + direction.y;
+		var next = false;
+		if (scenary.isNotBorder(x, y)){
+			switch (this.map[y][x])
+			{
+				case 1:                         //Biscuit
+				case 2:                         //Empty
+				case 4:                         //Pill
+				case 5:							//Fruit
+					next = true;
+					break;
+				default:
+					next = false;
+			}
+		}
+		return next;
+	},
+    
+    changeBlock: function(){
+        maxOffsetX = this.blockSize.width/2;
+        maxOffsetY = this.blockSize.height/2;
+		
+        if(this.positionoffset.x > maxOffsetX){
+			this.position.x += 1;
+			this.positionoffset.x = 0-maxOffsetX;
+		}
+        if(this.positionoffset.x < 0-maxOffsetX){
+			this.position.x -= 1;
+			this.positionoffset.x = maxOffsetX;
+		}
+        if(this.positionoffset.y > maxOffsetY){
+			this.position.y += 1;
+			this.positionoffset.y = 0-maxOffsetY;
+		}
+        if(this.positionoffset.y < 0-maxOffsetY){
+			this.position.y -= 1;
+			this.positionoffset.y = maxOffsetY;
+		}
+    },
+    
+    updateRotation: function()
+    {
+		if(this.direction.x == -1){this.rotation = 5*Math.PI/4}
+		else if(this.direction.y == 1){this.rotation = 3*Math.PI/4}
+		else if(this.direction.y == -1){this.rotation = 7*Math.PI/4}
+		else {this.rotation = Math.PI/4};
+	},
 
     updatePos: function()
     {
+		if (this.nextDirection.x == 0 && this.nextDirection.y == 0){
+			this.direction = this.nextDirection;
+		}
+		
+		if (this.nextDirection != this.direction) {
+			if ((this.positionoffset.x == 0) && this.direction.x != 0 && this.nextBlock(this.nextDirection)){
+				this.direction = this.nextDirection;
+			}
+			if ((this.positionoffset.y == 0) && this.direction.y != 0 && this.nextBlock(this.nextDirection)){
+				this.direction = this.nextDirection;
+			}
+		}
+		
+		if((this.positionoffset.x == 0) && (this.nextBlock(this.direction) == false)){
+			this.direction.x = 0;
+		}
+		
+		if((this.positionoffset.y == 0) && (this.nextBlock(this.direction) == false)){
+			this.direction.y = 0;
+		}
+		
+		
+		this.updateRotation();
+		
         this.positionoffset.x = this.positionoffset.x + this.direction.x;
         this.positionoffset.y = this.positionoffset.y + this.direction.y;
-        maxOffsetX = this.blockSize.width/2;
-        maxOffsetY = this.blockSize.height/2;
 
-        if(this.positionoffset.x > maxOffsetX){this.position.x += 1}
-        if(this.positionoffset.x < 0-maxOffsetX){this.position.x -= 1}
-        if(this.positionoffset.y > maxOffsetY){this.position.y += 1}
-        if(this.positionoffset.y < 0-maxOffsetY){this.position.y -= 1}
+		this.changeBlock();
     },
 
     draw: function()
