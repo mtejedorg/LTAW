@@ -61,6 +61,8 @@ var scenary =
         this.context = context;
         this.blockSize = blocksize;
         this.map = map;
+        this.cherry = new Image();
+        this.cherry.src = "cherrys.PNG";
     },
 
     update: function(map, blocksize = this.blockSize)
@@ -134,7 +136,12 @@ var scenary =
     },
 
     drawEmpty: function (x, y) { this.drawRect(x, y, "black") },
-    drawFruit: function (x, y) { this.drawBiscuit(x,y,true)},
+    drawFruit: function (x, y) 
+    {
+        x = x * this.blockSize.width;
+        y = y * this.blockSize.height;
+        this.context.drawImage(this.cherry, x, y, this.blockSize.width, this.blockSize.height);
+    },
 
     drawItem: function (item, x, y)
     {
@@ -181,7 +188,7 @@ var scenary =
 var pacMan =
 {
     position: {},
-    positionoffset: {},
+    positionoffset: {x:0, y:0},
     close: false,
     color: "yellow",
     rotation: Math.PI/4,
@@ -205,8 +212,8 @@ var pacMan =
 
     updatePos: function()
     {
-        this.positionoffset.x = this.positionoffset.x + this.direction.x/(this.canvas.width);
-        this.positionoffset.y = this.positionoffset.y + this.direction.y/(this.canvas.height);
+        this.positionoffset.x = this.positionoffset.x + this.direction.x;
+        this.positionoffset.y = this.positionoffset.y + this.direction.y;
         maxOffsetX = this.blockSize.width/2;
         maxOffsetY = this.blockSize.height/2;
 
@@ -221,8 +228,8 @@ var pacMan =
         y = parseInt(pacMan.y);
         x = parseInt(pacMan.x);
         this.context.fillStyle = pacMan.color;
-        x = this.position.x * this.blockSize.width + this.blockSize.width/2;
-        y = this.position.y * this.blockSize.height + this.blockSize.height/2;
+        x = this.position.x * this.blockSize.width + this.blockSize.width/2 + this.positionoffset.x;
+        y = this.position.y * this.blockSize.height + this.blockSize.height/2 + this.positionoffset.y;
         var size = Math.min(this.blockSize.width,this.blockSize.height)/2;
         this.context.beginPath();
         if (pacMan.close)
@@ -233,7 +240,7 @@ var pacMan =
             this.context.arc(x, y, size, 0+this.rotation, 3*Math.PI/2+this.rotation);
         }
         this.context.fill();
-    },
+    }
 
 }
 
