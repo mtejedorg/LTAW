@@ -15,6 +15,13 @@ var gameArea =
         this.map = map;
         scenary.init(this.gameCanvas, this.gameContext, this.blockSize, map);
         pacMan.init(this.gameCanvas, this.gameContext, this.blockSize, map, 9, 12);
+
+        var redghost = new ghost("red_ghost.PNG", this.gameCanvas, this.gameContext, this.blockSize, map, 4, 9, 1, 0);
+        ghosts.addGhost(redghost);
+
+        var blueghost = new ghost("blue_ghost.PNG", this.gameCanvas, this.gameContext, this.blockSize, map, 14, 11, 0, 1);
+        ghosts.addGhost(blueghost);
+
         window.addEventListener('keydown', function (e) {
             gameArea.key = e.keyCode;
         });
@@ -70,6 +77,9 @@ var gameArea =
         pacMan.update(this.map, this.blockSize);
         pacMan.updatePos();
         pacMan.draw();
+
+        ghosts.update();
+        ghosts.draw();
 
         this.changeMap();
 
@@ -239,7 +249,7 @@ var pacMan =
         this.positionoffset.y = 0;
         this.position.x = x;
         this.position.y = y;
-        this.speed = 5;
+        this.speed = 3;
     },
 
     update: function(map, blocksize = this.blockSize)
@@ -409,6 +419,138 @@ var pacMan =
         this.context.fill();
     }
 
+}
+
+function ghost (file, canvas, context, blocksize, map, x , y, directionx, directiony) 
+{
+    this.direction = {};
+    this.blockSize= {};
+    this.positionoffset = {};
+    this. position = {};
+
+    this.image = new Image();
+    this.image.src = file;
+    this.canvas = canvas;
+    this.context = context;
+    this.blockSize = blocksize;
+    this.map = map;
+    this.direction.x = directionx;
+    this.direction.y = directiony;
+    this.positionoffset.x = 0;
+    this.positionoffset.y = 0;
+    this.position.x = x;
+    this.position.y = y;
+    this.speed = 3;
+
+    this.update = function(map, blocksize = this.blockSize)
+    {
+        this.blockSize = blocksize;
+        this.map = map;
+    }
+    
+    this.nextBlock = function(dir){
+		x = parseInt(this.position.x) + parseInt(dir.x);
+		y = parseInt(this.position.y) + parseInt(dir.y);
+		var next = false;
+		if (scenary.isNotBorder(x, y)){
+			switch (this.map[y][x])
+			{
+				case 1:                         //Biscuit
+				case 2:                         //Empty
+				case 4:                         //Pill
+				case 5:							//Fruit
+					next = true;
+					break;
+				default:
+					next = false;
+			}
+		}
+		return next;
+	}
+    
+    this.changeBlock = function(){
+        maxOffsetX = this.blockSize.width/2;
+        maxOffsetY = this.blockSize.height/2;
+		
+        if(this.positionoffset.x > maxOffsetX){
+			this.position.x += 1;
+			this.positionoffset.x = 0-maxOffsetX;
+		}
+        if(this.positionoffset.x < 0-maxOffsetX){
+			this.position.x -= 1;
+			this.positionoffset.x = maxOffsetX;
+		}
+        if(this.positionoffset.y > maxOffsetY){
+			this.position.y += 1;
+			this.positionoffset.y = 0-maxOffsetY;
+		}
+        if(this.positionoffset.y < 0-maxOffsetY){
+			this.position.y -= 1;
+			this.positionoffset.y = maxOffsetY;
+		}
+    }
+   
+    this.updatePos = function()
+    {
+        if (direction.x)
+        {
+            if(this.direction.x * this.positionoffset.x > 0)
+            {
+                this.direccion.x = this.direccion.x * (-1);
+            }
+        } 
+        else if (direction.y)
+        {
+            if(this.direction.y * this.positionoffset.y > 0)
+            {
+                this.direccion.y = this.direccion.y * (-1);
+            }
+        }
+
+        this.positionoffset.x = this.positionoffset.x + this.direction.x*this.speed;
+        this.positionoffset.y = this.positionoffset.y + this.direction.y*this.speed;
+
+		this.changeBlock();
+    }
+
+    this.draw = function()
+    {
+        x = x * this.blockSize.width;
+        y = y * this.blockSize.height;
+        this.context.drawImage(this.image, x, y, this.blockSize.width, this.blockSize.height);
+    }
+}
+
+var ghosts = 
+{
+    arr: [],
+
+    addGhost: function(g)
+    {
+        this.arr.push(g);
+    },
+    
+    createAndAddGhost: function(file, position, direction)
+    {
+        newghost = new ghost(file, position, direction);
+        this.arr.push(newghost);
+    },
+
+    update: function(map, blocksize)
+    {
+        for (item of this.arr)
+        {
+            item.update(map, blocksize);
+        }
+    },
+
+    draw: function()
+    {
+        for(item of this.arr)
+        {
+            item.draw();
+        }
+    }
 }
 
     WALL    = 0;
