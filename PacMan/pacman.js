@@ -35,6 +35,24 @@ var gameArea =
         this.gameContext.clearRect(0, 0, this.gameCanvas.width, this.gameCanvas.height);
     },
 
+    changeMap: function()
+    {
+        x = parseInt(pacMan.position.x);
+        y = parseInt(pacMan.position.y);
+        var item = this.map[y][x]
+        switch (item)
+        {
+            case 1:
+            case 4:
+            case 5:
+                this.map[y][x] = 2;
+                pacMan.close = true;
+                break;
+            default:
+                pacMan.close = false;
+        }
+    },
+
     draw: function ()
     {
         /* Refresh every time, just in case it has changed */
@@ -49,8 +67,11 @@ var gameArea =
 		if (this.key && this.key == 38) {pacMan.nextDirection.x = 0; pacMan.nextDirection.y = -1;}
 		if (this.key && this.key == 40) {pacMan.nextDirection.x = 0; pacMan.nextDirection.y = 1;}
 		
+        pacMan.update(this.map, this.blockSize);
         pacMan.updatePos();
         pacMan.draw();
+
+        this.changeMap();
 
     }
 }
@@ -202,6 +223,7 @@ var pacMan =
     rotation: Math.PI/4,
     direction: {x:0, y:0},
     nextDirection: {x:0, y:0},
+    speed: 3,
 
     init: function(canvas, context, blocksize, map, x , y)
     {
@@ -217,6 +239,7 @@ var pacMan =
         this.positionoffset.y = 0;
         this.position.x = x;
         this.position.y = y;
+        this.speed = 5;
     },
 
     update: function(map, blocksize = this.blockSize)
@@ -225,9 +248,9 @@ var pacMan =
         this.map = map;
     },
     
-    nextBlock: function(direction){
-		x = this.position.x + direction.x;
-		y = this.position.y + direction.y;
+    nextBlock: function(dir){
+		x = parseInt(this.position.x) + parseInt(dir.x);
+		y = parseInt(this.position.y) + parseInt(dir.y);
 		var next = false;
 		if (scenary.isNotBorder(x, y)){
 			switch (this.map[y][x])
@@ -269,40 +292,100 @@ var pacMan =
     
     updateRotation: function()
     {
-		if(this.direction.x == -1){this.rotation = 5*Math.PI/4}
+        if(this.direction.x == 1){this.rotation = Math.PI/4}
+		else if(this.direction.x == -1){this.rotation = 5*Math.PI/4}
 		else if(this.direction.y == 1){this.rotation = 3*Math.PI/4}
 		else if(this.direction.y == -1){this.rotation = 7*Math.PI/4}
-		else {this.rotation = Math.PI/4};
 	},
 
+    analyzeMovement: function()
+    {
+        if (this.direction.x != 0)          // X axe direction
+        {
+            if ((this.nextDirection.x == this.direction.x) && (this.nextDirection.y == this.direction.y)) 
+            {
+                if(this.nextBlock(this.direction) == false)
+                {
+                    if(this.positionoffset.x == 0)
+                    {
+                        this.direction.x = 0;
+                    } else if ((this.direction.x*this.positionoffset.x) > 0) 
+                    {
+                        this.positionoffset.x = 0;
+                        this.direction.x = 0;
+                    }
+
+                }
+            } else if ((this.nextDirection.x != this.direction.x) && this.nextDirection.y == this.direction.y) 
+            {
+                this.direction.x = this.nextDirection.x;
+            } else 
+            {
+                if (this.nextBlock(this.nextDirection))
+                {
+                    if(this.positionoffset.x == 0)
+                    {
+                        this.direction.x = this.nextDirection.x;
+                        this.direction.y = this.nextDirection.y;
+                    } else if ((this.direction.x*this.positionoffset.x) > 0) 
+                    {
+                        this.positionoffset.x = 0;
+                        this.direction.x = this.nextDirection.x;
+                        this.direction.y = this.nextDirection.y;
+                    }
+                }
+            }
+        } else if (this.direction.y != 0)       //Y axe direction
+        {
+            if ((this.nextDirection.y == this.direction.y) && (this.nextDirection.x == this.direction.x)) 
+            {
+                if(this.nextBlock(this.direction) == false)
+                {
+                    if(this.positionoffset.y == 0)
+                    {
+                        this.positionoffset.y = 0;
+                        this.direction.y = 0;
+                    } else if ((this.direction.y * this.positionoffset.y) > 0) 
+                    {
+                        this.positionoffset.y = 0;
+                        this.direction.y = 0;
+                    }
+                }
+            } else if ((this.nextDirection.y != this.direction.y) && this.nextDirection.x == this.direction.x) 
+            {
+                this.direction.y = this.nextDirection.y;
+            } else 
+            {
+                if (this.nextBlock(this.nextDirection))
+                {
+                    if(this.positionoffset.y == 0)
+                    {
+                        this.direction.x = this.nextDirection.x;
+                        this.direction.y = this.nextDirection.y;
+                    } else if ((this.direction.y * this.positionoffset.y) > 0) 
+                    {
+                        this.positionoffset.y = 0;
+                        this.direction.x = this.nextDirection.x;
+                        this.direction.y = this.nextDirection.y;
+                    }
+                }
+            } 
+        } else if ((this.nextDirection.x != 0) || (this.nextDirection.y != 0))
+        {
+            this.direction.x = this.nextDirection.x;
+            this.direction.y = this.nextDirection.y;
+            this.analyzeMovement();
+        }
+    },
+   
     updatePos: function()
     {
-		if (this.nextDirection.x == 0 && this.nextDirection.y == 0){
-			this.direction = this.nextDirection;
-		}
-		
-		if (this.nextDirection != this.direction) {
-			if ((this.positionoffset.x == 0) && this.direction.x != 0 && this.nextBlock(this.nextDirection)){
-				this.direction = this.nextDirection;
-			}
-			if ((this.positionoffset.y == 0) && this.direction.y != 0 && this.nextBlock(this.nextDirection)){
-				this.direction = this.nextDirection;
-			}
-		}
-		
-		if((this.positionoffset.x == 0) && (this.nextBlock(this.direction) == false)){
-			this.direction.x = 0;
-		}
-		
-		if((this.positionoffset.y == 0) && (this.nextBlock(this.direction) == false)){
-			this.direction.y = 0;
-		}
-		
+        this.analyzeMovement();
 		
 		this.updateRotation();
 		
-        this.positionoffset.x = this.positionoffset.x + this.direction.x;
-        this.positionoffset.y = this.positionoffset.y + this.direction.y;
+        this.positionoffset.x = this.positionoffset.x + this.direction.x*this.speed;
+        this.positionoffset.y = this.positionoffset.y + this.direction.y*this.speed;
 
 		this.changeBlock();
     },
