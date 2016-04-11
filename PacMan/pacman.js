@@ -2,7 +2,7 @@ function startGame ()
 {
     gameArea.create();
     gameArea.init(MAP);
-    gameArea.draw();
+    var interval = setInterval(updateGameArea, 20);
 }
 
 var gameArea =
@@ -14,7 +14,7 @@ var gameArea =
     {
         this.map = map;
         scenary.init(this.gameCanvas, this.gameContext, this.blockSize, map);
-        //pacMan.init(this.gameCanvas, this.gameContext, this.blockSize, map);
+        pacMan.init(this.gameCanvas, this.gameContext, this.blockSize, map, 9, 12);
     },
 
     create: function ()
@@ -34,22 +34,23 @@ var gameArea =
 
     draw: function ()
     {
-        this.clear();
         /* Refresh every time, just in case it has changed */
         this.blockSize.width = this.gameCanvas.width / this.map[0].length;
         this.blockSize.height = this.gameCanvas.height / this.map.length;
 
-        var line;
-        for (var y in this.map)
-        {
-            var line = this.map[y];
-            for (var x in line)
-            {
-                var item = line[x];
-                scenary.draw(item, x, y);
-            }
-        }
+        scenary.update(this.map, this.blockSize)
+        scenary.draw();
+
+        pacMan.updatePos();
+        pacMan.draw();
+
     }
+}
+
+function updateGameArea()
+{
+    gameArea.clear();
+    gameArea.draw();
 }
 
 var scenary =
@@ -129,13 +130,13 @@ var scenary =
 
     drawBiscuit: function (x, y, big) {
         this.drawEmpty(x, y);   //First, we draw an empty background;
-        this.drawCircle(x,y,"yellow",big);
+        this.drawCircle(x,y,"lightyellow",big);
     },
 
     drawEmpty: function (x, y) { this.drawRect(x, y, "black") },
     drawFruit: function (x, y) { this.drawBiscuit(x,y,true)},
 
-    draw: function (item, x, y)
+    drawItem: function (item, x, y)
     {
         switch (item)
         {
@@ -160,22 +161,40 @@ var scenary =
             default:
                 throw "Not contempled number in Map";
         }
+    },
+
+    draw: function()
+    {
+        var line;
+        for (var y in this.map)
+        {
+            var line = this.map[y];
+            for (var x in line)
+            {
+                var item = line[x];
+                this.drawItem(item, x, y);
+            }
+        }
     }
 }
 
 var pacMan =
 {
-    x: 0,
-    y: 0,
-    open: true,
+    position: {},
+    positionoffset: {},
+    close: false,
     color: "yellow",
+    rotation: Math.PI/4,
+    direction: {x:1, y:0},
 
-    init: function(canvas, context, blocksize, map)
+    init: function(canvas, context, blocksize, map, x , y)
     {
         this.canvas = canvas;
         this.context = context;
         this.blockSize = blocksize;
         this.map = map;
+        this.position.x = x;
+        this.position.y = y;
     },
 
     update: function(map, blocksize = this.blockSize)
@@ -184,20 +203,34 @@ var pacMan =
         this.map = map;
     },
 
+    updatePos: function()
+    {
+        this.positionoffset.x = this.positionoffset.x + this.direction.x/(this.canvas.width);
+        this.positionoffset.y = this.positionoffset.y + this.direction.y/(this.canvas.height);
+        maxOffsetX = this.blockSize.width/2;
+        maxOffsetY = this.blockSize.height/2;
+
+        if(this.positionoffset.x > maxOffsetX){this.position.x += 1}
+        if(this.positionoffset.x < 0-maxOffsetX){this.position.x -= 1}
+        if(this.positionoffset.y > maxOffsetY){this.position.y += 1}
+        if(this.positionoffset.y < 0-maxOffsetY){this.position.y -= 1}
+    },
+
     draw: function()
     {
         y = parseInt(pacMan.y);
         x = parseInt(pacMan.x);
         this.context.fillStyle = pacMan.color;
-        x = x * this.blockSize.width + this.blockSize.width/2;
-        y = y * this.blockSize.height + this.blockSize.height/2;
-        var size = Math.min(this.blockSize.width,this.blockSize.height);
+        x = this.position.x * this.blockSize.width + this.blockSize.width/2;
+        y = this.position.y * this.blockSize.height + this.blockSize.height/2;
+        var size = Math.min(this.blockSize.width,this.blockSize.height)/2;
         this.context.beginPath();
         if (pacMan.close)
         {
             this.context.arc(x, y, size, 0, 2*Math.PI);
         } else {
-            this.context.arc(x, y, size, Math.PI/5, 9*Math.PI/5);
+            this.context.moveTo(x,y)
+            this.context.arc(x, y, size, 0+this.rotation, 3*Math.PI/2+this.rotation);
         }
         this.context.fill();
     },
