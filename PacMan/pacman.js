@@ -16,11 +16,9 @@ var gameArea =
         scenary.init(this.gameCanvas, this.gameContext, this.blockSize, map);
         pacMan.init(this.gameCanvas, this.gameContext, this.blockSize, map, 9, 12);
 
-        var redghost = new ghost("red_ghost.PNG", this.gameCanvas, this.gameContext, this.blockSize, map, 4, 9, 1, 0);
-        ghosts.addGhost(redghost);
+        this.redghost = new ghost("red_ghost.PNG", this.gameCanvas, this.gameContext, this.blockSize, map, 9, 4, 1, 0);
 
-        var blueghost = new ghost("blue_ghost.PNG", this.gameCanvas, this.gameContext, this.blockSize, map, 14, 11, 0, 1);
-        ghosts.addGhost(blueghost);
+        this.blueghost = new ghost("blue_ghost.PNG", this.gameCanvas, this.gameContext, this.blockSize, map, 14, 11, 0, 1);
 
         window.addEventListener('keydown', function (e) {
             gameArea.key = e.keyCode;
@@ -54,9 +52,21 @@ var gameArea =
             case 5:
                 this.map[y][x] = 2;
                 pacMan.close = true;
+                pacMan.closing = true;
                 break;
-            default:
-                pacMan.close = false;
+        }
+    },
+
+    gameLogic: function()
+    {
+        this.changeMap();
+        if (this.redghost.position == pacMan.position)
+        {
+            pacMan.dead = true;
+        }
+        if (this.blueghost.position == pacMan.position)
+        {
+            pacMan.dead = true
         }
     },
 
@@ -78,10 +88,15 @@ var gameArea =
         pacMan.updatePos();
         pacMan.draw();
 
-        ghosts.update();
-        ghosts.draw();
+        this.blueghost.update(this.map, this.blockSize);
+        this.blueghost.updatePos();
+        this.blueghost.draw();
 
-        this.changeMap();
+        this.redghost.update(this.map, this.blockSize);
+        this.redghost.updatePos();
+        this.redghost.draw();
+
+        this.gameLogic();
 
     }
 }
@@ -229,11 +244,16 @@ var pacMan =
     position: {},
     positionoffset: {x:0, y:0},
     close: false,
+    opening: false,
+    closing: false,
     color: "yellow",
     rotation: Math.PI/4,
     direction: {x:0, y:0},
     nextDirection: {x:0, y:0},
     speed: 3,
+    dead: false,
+    eatAnimationState: 0,
+    eatAnimationStepAngle: 0,
 
     init: function(canvas, context, blocksize, map, x , y)
     {
@@ -387,6 +407,56 @@ var pacMan =
             this.analyzeMovement();
         }
     },
+
+    eatAnimation: function()
+    {
+        if (this.close)
+        {
+            if (this.direction.x)
+            {
+                if(this.closing)
+                {
+                    this.eatAnimationState = this.eatAnimationState + 1;
+                    this.eatAnimationStepAngle = 2*(Math.PI/2)/(this.blockSize.width/this.speed)
+                    if (this.eatAnimationState == (this.blockSize.width/this.speed)/2)
+                    {
+                        this.closing = false;
+                        this.opening = true;
+                    }
+                } else if (this.opening)
+                {
+                    this.eatAnimationState = this.eatAnimationState - 1;
+                    if (this.eatAnimationState == 0)
+                    {
+                        this.opening = false;
+                        this.close = false;
+                    }
+                }
+
+            } else if (this.direction.y)
+            {
+                if(this.closing)
+                {
+                    this.eatAnimationState = this.eatAnimationState + 1;
+                    this.eatAnimationStepAngle = 2*(Math.PI/2)/(this.blockSize.height/this.speed);
+                    if (this.eatAnimationState == (this.blockSize.height/this.speed)/2)
+                    {
+                        this.closing = false;
+                        this.opening = true;
+                    }
+                } else if (this.opening)
+                {
+                    this.eatAnimationState = this.eatAnimationState - 1;
+                    if (this.eatAnimationState == 0)
+                    {
+                        this.opening = false;
+                        this.close = false;
+                    }
+                }
+            }
+            
+        }
+    },
    
     updatePos: function()
     {
@@ -398,6 +468,7 @@ var pacMan =
         this.positionoffset.y = this.positionoffset.y + this.direction.y*this.speed;
 
 		this.changeBlock();
+        this.eatAnimation();
     },
 
     draw: function()
@@ -409,12 +480,13 @@ var pacMan =
         y = this.position.y * this.blockSize.height + this.blockSize.height/2 + this.positionoffset.y;
         var size = Math.min(this.blockSize.width,this.blockSize.height)/2;
         this.context.beginPath();
-        if (pacMan.close)
+        if (this.close && (this.opening == false) && (this.closing == false))
         {
             this.context.arc(x, y, size, 0, 2*Math.PI);
         } else {
             this.context.moveTo(x,y)
-            this.context.arc(x, y, size, 0+this.rotation, 3*Math.PI/2+this.rotation);
+            var eatAnimationAngle = this.eatAnimationState * this.eatAnimationStepAngle;
+            this.context.arc(x, y, size, 0+this.rotation+eatAnimationAngle, 3*Math.PI/2+this.rotation-eatAnimationAngle);
         }
         this.context.fill();
     }
@@ -492,64 +564,36 @@ function ghost (file, canvas, context, blocksize, map, x , y, directionx, direct
    
     this.updatePos = function()
     {
-        if (direction.x)
+        if (this.direction.x)
         {
-            if(this.direction.x * this.positionoffset.x > 0)
-            {
-                this.direccion.x = this.direccion.x * (-1);
+            if(this.nextBlock(this.direction) == false){
+                if(this.direction.x * this.positionoffset.x > 0)
+                {
+                    this.direction.x = this.direction.x * (-1);
+                }
             }
         } 
-        else if (direction.y)
+        else if (this.direction.y)
         {
-            if(this.direction.y * this.positionoffset.y > 0)
-            {
-                this.direccion.y = this.direccion.y * (-1);
+            if(this.nextBlock(this.direction) == false){
+                if(this.direction.y * this.positionoffset.y > 0)
+                {
+                    this.direction.y = this.direction.y * (-1);
+                }
             }
         }
 
-        this.positionoffset.x = this.positionoffset.x + this.direction.x*this.speed;
-        this.positionoffset.y = this.positionoffset.y + this.direction.y*this.speed;
+        this.positionoffset.x = parseInt(this.positionoffset.x) + parseInt(this.direction.x*this.speed);
+        this.positionoffset.y = parseInt(this.positionoffset.y) + parseInt(this.direction.y*this.speed);
 
 		this.changeBlock();
     }
 
     this.draw = function()
     {
-        x = x * this.blockSize.width;
-        y = y * this.blockSize.height;
+        x = this.position.x * this.blockSize.width + this.positionoffset.x;
+        y = this.position.y * this.blockSize.height + this.positionoffset.y;
         this.context.drawImage(this.image, x, y, this.blockSize.width, this.blockSize.height);
-    }
-}
-
-var ghosts = 
-{
-    arr: [],
-
-    addGhost: function(g)
-    {
-        this.arr.push(g);
-    },
-    
-    createAndAddGhost: function(file, position, direction)
-    {
-        newghost = new ghost(file, position, direction);
-        this.arr.push(newghost);
-    },
-
-    update: function(map, blocksize)
-    {
-        for (item of this.arr)
-        {
-            item.update(map, blocksize);
-        }
-    },
-
-    draw: function()
-    {
-        for(item of this.arr)
-        {
-            item.draw();
-        }
     }
 }
 
