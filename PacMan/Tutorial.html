@@ -120,3 +120,43 @@
     
     </body>
 </html>
+
+var ghosts = 
+{
+    arr: [],
+
+    addGhost: function(g)
+    {
+        this.arr.push(g);
+    },
+    
+    createAndAddGhost: function(file, position, direction)
+    {
+        newghost = new ghost(file, position, direction);
+        this.arr.push(newghost);
+    },
+
+    update: function(map, blocksize)
+    {
+        for (item of this.arr)
+        {
+            item.update(map, blocksize);
+        }
+    },
+
+    updatePos: function()
+    {
+        for (item of this.arr)
+        {
+            item.updatePos();
+        }
+    },
+
+    draw: function()
+    {
+        for(item of this.arr)
+        {
+            item.draw();
+        }
+    }
+}
