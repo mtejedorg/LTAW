@@ -52,8 +52,9 @@ var gameArea =
             case 5:
                 this.map[y][x] = 2;
                 pacMan.close = true;
-                pacMan.closing = true;
                 break;
+            default:
+                pacMan.close = false;
         }
     },
 
@@ -244,16 +245,11 @@ var pacMan =
     position: {},
     positionoffset: {x:0, y:0},
     close: false,
-    opening: false,
-    closing: false,
     color: "yellow",
     rotation: Math.PI/4,
     direction: {x:0, y:0},
     nextDirection: {x:0, y:0},
     speed: 3,
-    dead: false,
-    eatAnimationState: 0,
-    eatAnimationStepAngle: 0,
 
     init: function(canvas, context, blocksize, map, x , y)
     {
@@ -407,56 +403,6 @@ var pacMan =
             this.analyzeMovement();
         }
     },
-
-    eatAnimation: function()
-    {
-        if (this.close)
-        {
-            if (this.direction.x)
-            {
-                if(this.closing)
-                {
-                    this.eatAnimationState = this.eatAnimationState + 1;
-                    this.eatAnimationStepAngle = 2*(Math.PI/2)/(this.blockSize.width/this.speed)
-                    if (this.eatAnimationState == (this.blockSize.width/this.speed)/2)
-                    {
-                        this.closing = false;
-                        this.opening = true;
-                    }
-                } else if (this.opening)
-                {
-                    this.eatAnimationState = this.eatAnimationState - 1;
-                    if (this.eatAnimationState == 0)
-                    {
-                        this.opening = false;
-                        this.close = false;
-                    }
-                }
-
-            } else if (this.direction.y)
-            {
-                if(this.closing)
-                {
-                    this.eatAnimationState = this.eatAnimationState + 1;
-                    this.eatAnimationStepAngle = 2*(Math.PI/2)/(this.blockSize.height/this.speed);
-                    if (this.eatAnimationState == (this.blockSize.height/this.speed)/2)
-                    {
-                        this.closing = false;
-                        this.opening = true;
-                    }
-                } else if (this.opening)
-                {
-                    this.eatAnimationState = this.eatAnimationState - 1;
-                    if (this.eatAnimationState == 0)
-                    {
-                        this.opening = false;
-                        this.close = false;
-                    }
-                }
-            }
-            
-        }
-    },
    
     updatePos: function()
     {
@@ -468,7 +414,6 @@ var pacMan =
         this.positionoffset.y = this.positionoffset.y + this.direction.y*this.speed;
 
 		this.changeBlock();
-        this.eatAnimation();
     },
 
     draw: function()
@@ -480,13 +425,12 @@ var pacMan =
         y = this.position.y * this.blockSize.height + this.blockSize.height/2 + this.positionoffset.y;
         var size = Math.min(this.blockSize.width,this.blockSize.height)/2;
         this.context.beginPath();
-        if (this.close && (this.opening == false) && (this.closing == false))
+        if (pacMan.close)
         {
             this.context.arc(x, y, size, 0, 2*Math.PI);
         } else {
             this.context.moveTo(x,y)
-            var eatAnimationAngle = this.eatAnimationState * this.eatAnimationStepAngle;
-            this.context.arc(x, y, size, 0+this.rotation+eatAnimationAngle, 3*Math.PI/2+this.rotation-eatAnimationAngle);
+            this.context.arc(x, y, size, 0+this.rotation, 3*Math.PI/2+this.rotation);
         }
         this.context.fill();
     }
