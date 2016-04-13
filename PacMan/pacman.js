@@ -1,14 +1,19 @@
 function startGame ()
 {
     gameArea.create();
+    gameArea.pause();
     gameArea.init(MAP);
     var interval = setInterval(updateGameArea, 20);
 }
+
+var fruitTimeOut;
+var play = false;
 
 var gameArea =
 {
     map:[],
     blockSize: {},
+    pauseImg: new Image(),
 
     init: function(map)
     {
@@ -27,17 +32,24 @@ var gameArea =
 
     create: function ()
     {
-        this.gameCanvas = document.createElement("canvas");
-        this.gameCanvas.id = "gameCanvas";
+        this.gameCanvas = document.getElementById("gameCanvas");
         this.gameCanvas.width = 342;
         this.gameCanvas.height = 550;
         this.gameContext = this.gameCanvas.getContext("2d");
-        document.body.insertBefore(this.gameCanvas, document.body.childNodes[0]);
+        this.pauseImg.src = "playpause.png";
     },
 
     clear: function ()
     {
         this.gameContext.clearRect(0, 0, this.gameCanvas.width, this.gameCanvas.height);
+    },
+
+    pause: function()
+    {
+        x = 0;
+        y = this.gameCanvas.height/2 - this.gameCanvas.width/2;
+        this.gameContext.beginPath();
+        this.gameContext.drawImage(this.pauseImg, x, y, this.gameCanvas.width, this.gameCanvas.width);
     },
 
     changeMap: function()
@@ -49,9 +61,16 @@ var gameArea =
         {
             case 1:
             case 4:
+                this.map[y][x] = 2;
+                pacMan.close = true;
+                break;
             case 5:
                 this.map[y][x] = 2;
                 pacMan.close = true;
+                if (fruitCount < MAXFRUITCOUNT)
+                {
+                    fruitTimeOut = setTimeout(generateFruit, 10*Math.random()*1000);
+                }
                 break;
             default:
                 pacMan.close = false;
@@ -79,11 +98,11 @@ var gameArea =
 
         scenary.update(this.map, this.blockSize)
         scenary.draw();
-        
-		if (this.key && this.key == 37) {pacMan.nextDirection.x = -1; pacMan.nextDirection.y = 0;}
-		if (this.key && this.key == 39) {pacMan.nextDirection.x = 1; pacMan.nextDirection.y = 0;}
-		if (this.key && this.key == 38) {pacMan.nextDirection.x = 0; pacMan.nextDirection.y = -1;}
-		if (this.key && this.key == 40) {pacMan.nextDirection.x = 0; pacMan.nextDirection.y = 1;}
+
+        if (this.key && this.key == 65) {pacMan.nextDirection.x = -1; pacMan.nextDirection.y = 0;}
+	    if (this.key && this.key == 68) {pacMan.nextDirection.x = 1; pacMan.nextDirection.y = 0;}
+	    if (this.key && this.key == 87) {pacMan.nextDirection.x = 0; pacMan.nextDirection.y = -1;}
+	    if (this.key && this.key == 83) {pacMan.nextDirection.x = 0; pacMan.nextDirection.y = 1;}
 		
         pacMan.update(this.map, this.blockSize);
         pacMan.updatePos();
@@ -98,14 +117,35 @@ var gameArea =
         this.redghost.draw();
 
         this.gameLogic();
-
     }
 }
 
 function updateGameArea()
 {
-    gameArea.clear();
-    gameArea.draw();
+    if (play){
+        gameArea.clear();
+        gameArea.draw();
+        score.update();
+    }
+}
+
+function pause()
+{
+    play = !play;
+    if (play)
+    {
+        fruitTimeOut = setTimeout(generateFruit, 10*Math.random()*1000);
+    } else 
+    {
+        clearTimeout(fruitTimeOut);
+        gameArea.pause();
+    }
+}
+
+function generateFruit()
+{
+    gameArea.map[12][9] = 5;
+    fruitCount = fruitCount + 1;
 }
 
 var scenary =
@@ -437,6 +477,15 @@ var pacMan =
 
 }
 
+var score = 
+{
+    score: 10,
+    update: function()
+    {
+        document.getElementById("score").innerHTML = this.score;
+    }
+};
+
 function ghost (file, canvas, context, blocksize, map, x , y, directionx, directiony) 
 {
     this.direction = {};
@@ -541,12 +590,29 @@ function ghost (file, canvas, context, blocksize, map, x , y, directionx, direct
     }
 }
 
+function allowDrop(ev) {
+    ev.preventDefault();
+}
+
+function drag(ev) {
+    ev.dataTransfer.setData("text", ev.target.id);
+}
+
+function drop(ev) {
+    ev.preventDefault();
+    var data = ev.dataTransfer.getData("text");
+    pacMan.color = data;
+}
+
     WALL    = 0;
     BISCUIT = 1;
     EMPTY   = 2;
     BLOCK   = 3;
     PILL    = 4;
     FRUIT   = 5;
+
+    MAXFRUITCOUNT = 4;
+    fruitCount = 0;
 
     MAP = [
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
