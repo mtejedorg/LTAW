@@ -8,5 +8,16 @@
     </head>
     <body onload="startGame()">
         <script src="pacman.js"></script>
+        <header> <h1>PacMan</h1><h3>By Marco Tejedor</h3></header>
+        <div id="gameArea">
+            <canvas id="gameCanvas" ondrop="drop(event)" ondragover="allowDrop(event)" onclick="pause()">No es posible cargar el juego</canvas>
+            <p id="scoretext">Score:<span id="score">0</span></p>
+            <table id="interface"><tr>
+                <td><canvas id="yellow" draggable ="true" ondragstart="drag(event)" class="pacManColorOption">Bad ID</canvas></td>
+                <td><canvas id="red" draggable ="true" ondragstart="drag(event)" class="pacManColorOption">Bad ID</canvas></td>
+                <td><canvas id="green" draggable ="true" ondragstart="drag(event)" class="pacManColorOption">Bad ID</canvas></td>
+            </tr></table>
+        </div>
+        <footer><h5><strong>GitHub:</strong><a href="https://github.com/mtejedorg" target="blank">https://github.com/mtejedorg</a></h5></footer>
     </body>
 </html>
