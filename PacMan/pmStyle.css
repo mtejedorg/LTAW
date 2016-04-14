@@ -12,12 +12,20 @@ h1 {
     font-size: 300%;
 }
 
+#info {
+    float:  left;
+    text-align:  left;
+    margin-left: 5%;
+    color:  yellow;
+    font-family:  'Comic Sans MS';
+    font-size: 200%;
+}
+
 #gameArea {
     width: 30%;
     background-color:  #111111;
     display: block;
     margin: auto;
-    clear: both;
     border: 1px solid #808080;
 }
 
@@ -26,6 +34,10 @@ h1 {
     background-color: black;
     display: block;
     margin: auto;
+}
+
+#videos {
+    float:  right;
 }
 
 #scoretext {
