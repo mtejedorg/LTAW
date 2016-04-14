@@ -1,13 +1,21 @@
 function startGame ()
 {
     gameArea.create();
-    gameArea.pause();
-    gameArea.init(MAP);
-    var interval = setInterval(updateGameArea, 20);
+    gameArea.init(MAP);     //???
+    drawPacManColorOptions();
+    interval = setInterval(updateGameArea, 20);
+    timeCount = 0;
+    score.startWorker();
+    score.write();
+    pause();        //???
+    document.getElementById("gameCanvas").onclick = function(){pause()};
 }
 
 var fruitTimeOut;
-var play = false;
+var count;
+var interval;
+var timeCount=0;
+var play = true;
 
 var gameArea =
 {
@@ -48,7 +56,6 @@ var gameArea =
     {
         x = 0;
         y = this.gameCanvas.height/2 - this.gameCanvas.width/2;
-        this.gameContext.beginPath();
         this.gameContext.drawImage(this.pauseImg, x, y, this.gameCanvas.width, this.gameCanvas.width);
     },
 
@@ -60,11 +67,22 @@ var gameArea =
         switch (item)
         {
             case 1:
-            case 4:
+                score.notify("pill");
                 this.map[y][x] = 2;
                 pacMan.close = true;
+                document.getElementById("coinsound").load();
+                document.getElementById("coinsound").currentTime = 0,5;
+                document.getElementById("coinsound").play();
+            case 4:
+                score.notify("bigpill");
+                this.map[y][x] = 2;
+                pacMan.close = true;
+                document.getElementById("coinsound").load();
+                document.getElementById("coinsound").currentTime = 0,5;
+                document.getElementById("coinsound").play();
                 break;
             case 5:
+                score.notify("fruit");
                 this.map[y][x] = 2;
                 pacMan.close = true;
                 if (fruitCount < MAXFRUITCOUNT)
@@ -80,14 +98,49 @@ var gameArea =
     gameLogic: function()
     {
         this.changeMap();
-        if (this.redghost.position == pacMan.position)
+        if (((this.redghost.position.x == pacMan.position.x) && (this.redghost.position.y == pacMan.position.y))
+             || ((this.blueghost.position.x == pacMan.position.x) && (this.blueghost.position.y == pacMan.position.y))
+              || (timeCount >= MAXTIME))
         {
             pacMan.dead = true;
+            pause();
+            this.endGame();
+        } else if (scenary.remainingPills == 0) {
+            pause();
+            this.winGame();
         }
-        if (this.blueghost.position == pacMan.position)
-        {
-            pacMan.dead = true
-        }
+    },
+
+    endGame: function()
+    {
+        score.stopWorker();
+        score.store(score.score);
+        score.write();
+        this.gameContext.font="30px Comic Sans MS";
+        this.gameContext.fillStyle = "blue";
+        this.gameContext.textAlign = "center";
+        this.gameContext.fillText("You died!!", this.gameCanvas.width/2, this.gameCanvas.height/2);
+        this.gameContext.fillText("Press to replay", this.gameCanvas.width/2, 3*this.gameCanvas.height/4);
+        document.getElementById("finalVideo").src = "sadtrombone.mp4";
+        clearInterval(interval);
+        document.getElementById("time").innerHTML = "Replay";       //???
+        document.getElementById("gameCanvas").onclick = function(){startGame()};
+    },
+
+    winGame: function()
+    {
+        score.stopWorker();
+        score.store(score.score);
+        score.write();
+        this.gameContext.font="30px Comic Sans MS";
+        this.gameContext.fillStyle = "blue";
+        this.gameContext.textAlign = "center";
+        this.gameContext.fillText("You Won!!", this.gameCanvas.width/2, this.gameCanvas.height/2);
+        this.gameContext.fillText("Press to replay", this.gameCanvas.width/2, 3*this.gameCanvas.height/4);
+        document.getElementById("finalVideo").src = "slowclap.mp4";
+        clearInterval(interval);
+        document.getElementById("time").innerHTML = "Replay";       //???
+        document.getElementById("gameCanvas").onclick = function(){startGame()};
     },
 
     draw: function ()
@@ -126,6 +179,7 @@ function updateGameArea()
         gameArea.clear();
         gameArea.draw();
         score.update();
+        document.getElementById("time").innerHTML = timeCount;
     }
 }
 
@@ -135,10 +189,14 @@ function pause()
     if (play)
     {
         fruitTimeOut = setTimeout(generateFruit, 10*Math.random()*1000);
+        count = setInterval(function(){timeCount += 1; score.notify("second")}, 1000)
+        document.getElementById("pacmanmusic").play();
     } else 
     {
         clearTimeout(fruitTimeOut);
         gameArea.pause();
+        clearInterval(count);
+        document.getElementById("pacmanmusic").pause();
     }
 }
 
@@ -148,8 +206,30 @@ function generateFruit()
     fruitCount = fruitCount + 1;
 }
 
+function drawPacManColorOptions()
+{
+    options = document.getElementsByClassName("pacManColorOption");
+    for (i = 0; i < options.length; i++)
+    {
+        context = options[i].getContext("2d");
+        options[i].width = 50;
+        options[i].height = 50;
+        x = options[i].width/2;
+        y = options[i].height/2;
+        size = 3*Math.min(options[i].width, options[i].height)/8
+        rotation = Math.PI/4;
+        context.fillStyle = options[i].id;
+        context.beginPath();
+        context.moveTo(x,y)
+        context.arc(x, y, size, 0+rotation, 3*Math.PI/2+rotation);
+        context.fill();
+    }
+}
+
 var scenary =
 {
+    remainingPills: 0,
+
     init: function(canvas, context, blocksize, map)
     {
         this.canvas = canvas;
@@ -245,8 +325,9 @@ var scenary =
             case 0:                         //Wall
                 this.drawWall(x, y);
                 break;
-            case 1:                         //Biscuit
+            case 1:                         //Pill
                 this.drawBiscuit(x, y, false);
+                this.remainingPills += 1;
                 break;
             case 2:                         //Empty
                 this.drawEmpty(x, y);
@@ -254,10 +335,11 @@ var scenary =
             case 3:                         //Block
                 this.drawEmpty(x, y);
                 break;
-            case 4:                         //Fruit
+            case 4:                         //Big Pill
                 this.drawBiscuit(x, y, true);
+                this.remainingPills += 1;
                 break;
-            case 5:
+            case 5:                         //Fruit
                 this.drawFruit(x,y);
                 break;
             default:
@@ -267,6 +349,7 @@ var scenary =
 
     draw: function()
     {
+        this.remainingPills = 0;
         var line;
         for (var y in this.map)
         {
@@ -479,19 +562,87 @@ var pacMan =
 
 var score = 
 {
-    score: 10,
+    score: 0,
+    w: undefined,
+
+    reset: function()
+    {
+        this.score = 0;
+    },
+
     update: function()
     {
         document.getElementById("score").innerHTML = this.score;
+    },
+
+    startWorker: function () {
+        if(typeof(Worker) !== "undefined") {
+            if(typeof(this.w) == "undefined") {
+                this.w = new Worker("scoreworker.js");
+            }
+            this.w.onmessage = function(event) {
+                this.score = event.data;
+            };
+        } else {
+            document.getElementById("score").innerHTML = "Sorry, your browser does not support Web Workers...";
+        }
+    },
+
+    stopWorker: function () { 
+        this.w.terminate();
+        this.w = undefined;
+    },
+
+    notify: function(id)
+    {
+        this.w.postMessage(id);
+    },
+
+    store: function(record)
+    {
+        if(typeof(Storage) !== "undefined") {
+            if((localStorage.getItem("alltimerecord")<record)||localStorage.getItem("alltimerecord"==undefined)){
+                localStorage.alltimerecord = record;
+            }
+            if(sessionStorage.getItem("record")!=undefined){
+                if(sessionStorage.getItem("record")<record)
+                {
+                    sessionStorage.record = record;
+                }
+            } else 
+            {
+                sessionStorage.record = record;
+            }
+        } else {
+            window.alert("Your browser does not support session storage. Your records will not be saved")
+        }
+    },
+
+    write: function()
+    {
+        if(typeof(Storage) !== "undefined") {
+            if(localStorage.getItem("alltimerecord") != undefined){
+                document.getElementById("alltimerecord").innerHTML = localStorage.getItem("alltimerecord");
+            } else {
+                document.getElementById("alltimerecord").innerHTML = 0;
+            }
+            if(sessionStorage.getItem("record") != undefined){
+                document.getElementById("sessionrecord").innerHTML = sessionStorage.getItem("sessionrecord");
+            } else {
+                document.getElementById("sessionrecord").innerHTML = 0;
+            }
+            
+           document.getElementById("lastscore").innerHTML = this.score;
+        }
     }
-};
+}
 
 function ghost (file, canvas, context, blocksize, map, x , y, directionx, directiony) 
 {
     this.direction = {};
     this.blockSize= {};
     this.positionoffset = {};
-    this. position = {};
+    this.position = {};
 
     this.image = new Image();
     this.image.src = file;
@@ -612,6 +763,7 @@ function drop(ev) {
     FRUIT   = 5;
 
     MAXFRUITCOUNT = 4;
+    MAXTIME = 60;
     fruitCount = 0;
 
     MAP = [
