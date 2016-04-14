@@ -178,7 +178,7 @@ function updateGameArea()
     if (play){
         gameArea.clear();
         gameArea.draw();
-        score.update();
+        //score.update();
         document.getElementById("time").innerHTML = timeCount;
     }
 }
@@ -581,7 +581,7 @@ var score =
                 this.w = new Worker("scoreworker.js");
             }
             this.w.onmessage = function(event) {
-                this.score = event.data;
+                document.getElementById("score").innerHTML = event.data;
             };
         } else {
             document.getElementById("score").innerHTML = "Sorry, your browser does not support Web Workers...";
