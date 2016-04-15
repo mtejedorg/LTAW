@@ -113,6 +113,7 @@ var gameArea =
 
     endGame: function()
     {
+        score.notify("finish");
         score.stopWorker();
         score.store(score.score);
         score.write();
@@ -129,6 +130,7 @@ var gameArea =
 
     winGame: function()
     {
+        score.notify("finish");
         score.stopWorker();
         score.store(score.score);
         score.write();
@@ -178,7 +180,7 @@ function updateGameArea()
     if (play){
         gameArea.clear();
         gameArea.draw();
-        //score.update();
+        score.update();
         document.getElementById("time").innerHTML = timeCount;
     }
 }
@@ -581,7 +583,8 @@ var score =
                 this.w = new Worker("scoreworker.js");
             }
             this.w.onmessage = function(event) {
-                document.getElementById("score").innerHTML = event.data;
+                //document.getElementById("score").innerHTML = event.data;
+                this.score = event.data;
             };
         } else {
             document.getElementById("score").innerHTML = "Sorry, your browser does not support Web Workers...";
