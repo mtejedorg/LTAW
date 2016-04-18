@@ -1,22 +1,25 @@
 function startGame ()
 {
+    MAP = DEFAULT_MAP.slice();
     gameArea.create();
-    gameArea.init(DEFAULT_MAP);     //???
+    gameArea.init(MAP);     //???
     drawPacManColorOptions();
     interval = setInterval(updateGameArea, 20);
     timeCount = 0;
     scoreobj.startWorker();
-    scoreobj.write();
     pause();        //???
     document.getElementById("gameCanvas").onclick = function(){pause()};
 }
 
 function restartGame ()
 {
-    gameArea.init(DEFAULT_MAP);     //???
-    interval = setInterval(updateGameArea, 20);
+    MAP = DEFAULT_MAP.slice();
+    window.alert(DEFAULT_MAP);
+    gameArea.init(MAP);     //???
     timeCount = 0;
-    scoreobj.startWorker();
+    document.getElementById("time").innerHTML = timeCount;
+    document.getElementById("finalVideo").src = "";
+    scoreobj.notify("reset");
     scoreobj.write();
     pause();        //???
     document.getElementById("gameCanvas").onclick = function(){pause()};
@@ -125,7 +128,6 @@ var gameArea =
 
     endGame: function()
     {
-        scoreobj.stopWorker();
         scoreobj.store(score);
         scoreobj.write();
         this.gameContext.font="30px Comic Sans MS";
@@ -134,15 +136,13 @@ var gameArea =
         this.gameContext.fillText("You died!!", this.gameCanvas.width/2, this.gameCanvas.height/2);
         this.gameContext.fillText("Press to replay", this.gameCanvas.width/2, 3*this.gameCanvas.height/4);
         document.getElementById("finalVideo").src = "sadtrombone.mp4";
-        clearInterval(interval);
-        document.getElementById("time").innerHTML = "Replay";       //???
+        document.getElementById("time").innerHTML = "Replay?";       //???
         document.getElementById("gameCanvas").onclick = function(){restartGame()};
     },
 
     winGame: function()
     {
         scoreobj.notify("finish");
-        scoreobj.stopWorker();
         scoreobj.store(score);
         scoreobj.write();
         this.gameContext.font="30px Comic Sans MS";
@@ -151,8 +151,8 @@ var gameArea =
         this.gameContext.fillText("You Won!!", this.gameCanvas.width/2, this.gameCanvas.height/2);
         this.gameContext.fillText("Press to replay", this.gameCanvas.width/2, 3*this.gameCanvas.height/4);
         document.getElementById("finalVideo").src = "slowclap.mp4";
-        clearInterval(interval);
-        document.getElementById("time").innerHTML = "Replay";       //???
+        document.getElementById("time").innerHTML = "Replay?";       //???
+        window.alert(document.getElementById("time").innerHTML);
         document.getElementById("gameCanvas").onclick = function(){restartGame()};
     },
 
@@ -192,7 +192,6 @@ function updateGameArea()
         gameArea.clear();
         gameArea.draw();
         scoreobj.update();
-        document.getElementById("time").innerHTML = timeCount;
     }
 }
 
@@ -202,7 +201,7 @@ function pause()
     if (play)
     {
         fruitTimeOut = setTimeout(generateFruit, 10*Math.random()*1000);
-        count = setInterval(function(){timeCount += 1; scoreobj.notify("second")}, 1000)
+        count = setInterval(function(){timeCount += 1; scoreobj.notify("second"); document.getElementById("time").innerHTML = timeCount;}, 1000)
         document.getElementById("pacmanmusic").play();
     } else 
     {
@@ -773,6 +772,8 @@ function drop(ev) {
     MAXFRUITCOUNT = 4;
     MAXTIME = 60;
     fruitCount = 0;
+
+    var MAP;
 
     DEFAULT_MAP = [
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],

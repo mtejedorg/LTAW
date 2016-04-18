@@ -23,6 +23,10 @@ onmessage = function (event)
         case "finish":
             finish = true;
             break;
+        case "reset":
+            score = 0;
+            timeRemaining = 60;
+            break;
     }
     if (finish)
     {
