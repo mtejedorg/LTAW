@@ -1,12 +1,23 @@
 function startGame ()
 {
     gameArea.create();
-    gameArea.init(MAP);     //???
+    gameArea.init(DEFAULT_MAP);     //???
     drawPacManColorOptions();
     interval = setInterval(updateGameArea, 20);
     timeCount = 0;
-    score.startWorker();
-    score.write();
+    scoreobj.startWorker();
+    scoreobj.write();
+    pause();        //???
+    document.getElementById("gameCanvas").onclick = function(){pause()};
+}
+
+function restartGame ()
+{
+    gameArea.init(DEFAULT_MAP);     //???
+    interval = setInterval(updateGameArea, 20);
+    timeCount = 0;
+    scoreobj.startWorker();
+    scoreobj.write();
     pause();        //???
     document.getElementById("gameCanvas").onclick = function(){pause()};
 }
@@ -23,15 +34,15 @@ var gameArea =
     blockSize: {},
     pauseImg: new Image(),
 
-    init: function(map)
+    init: function(initmap)
     {
-        this.map = map;
-        scenary.init(this.gameCanvas, this.gameContext, this.blockSize, map);
-        pacMan.init(this.gameCanvas, this.gameContext, this.blockSize, map, 9, 12);
+        this.map = initmap;
+        scenary.init(this.gameCanvas, this.gameContext, this.blockSize, initmap);
+        pacMan.init(this.gameCanvas, this.gameContext, this.blockSize, initmap, 9, 12);
 
-        this.redghost = new ghost("red_ghost.PNG", this.gameCanvas, this.gameContext, this.blockSize, map, 9, 4, 1, 0);
+        this.redghost = new ghost("red_ghost.PNG", this.gameCanvas, this.gameContext, this.blockSize, initmap, 9, 4, 1, 0);
 
-        this.blueghost = new ghost("blue_ghost.PNG", this.gameCanvas, this.gameContext, this.blockSize, map, 14, 11, 0, 1);
+        this.blueghost = new ghost("blue_ghost.PNG", this.gameCanvas, this.gameContext, this.blockSize, initmap, 14, 11, 0, 1);
 
         window.addEventListener('keydown', function (e) {
             gameArea.key = e.keyCode;
@@ -67,14 +78,15 @@ var gameArea =
         switch (item)
         {
             case 1:
-                score.notify("pill");
+                scoreobj.notify("pill");
                 this.map[y][x] = 2;
                 pacMan.close = true;
                 document.getElementById("coinsound").load();
                 document.getElementById("coinsound").currentTime = 0,5;
                 document.getElementById("coinsound").play();
+                break;
             case 4:
-                score.notify("bigpill");
+                scoreobj.notify("bigpill");
                 this.map[y][x] = 2;
                 pacMan.close = true;
                 document.getElementById("coinsound").load();
@@ -82,7 +94,7 @@ var gameArea =
                 document.getElementById("coinsound").play();
                 break;
             case 5:
-                score.notify("fruit");
+                scoreobj.notify("fruit");
                 this.map[y][x] = 2;
                 pacMan.close = true;
                 if (fruitCount < MAXFRUITCOUNT)
@@ -113,10 +125,9 @@ var gameArea =
 
     endGame: function()
     {
-        score.notify("finish");
-        score.stopWorker();
-        score.store(score.score);
-        score.write();
+        scoreobj.stopWorker();
+        scoreobj.store(score);
+        scoreobj.write();
         this.gameContext.font="30px Comic Sans MS";
         this.gameContext.fillStyle = "blue";
         this.gameContext.textAlign = "center";
@@ -125,15 +136,15 @@ var gameArea =
         document.getElementById("finalVideo").src = "sadtrombone.mp4";
         clearInterval(interval);
         document.getElementById("time").innerHTML = "Replay";       //???
-        document.getElementById("gameCanvas").onclick = function(){startGame()};
+        document.getElementById("gameCanvas").onclick = function(){restartGame()};
     },
 
     winGame: function()
     {
-        score.notify("finish");
-        score.stopWorker();
-        score.store(score.score);
-        score.write();
+        scoreobj.notify("finish");
+        scoreobj.stopWorker();
+        scoreobj.store(score);
+        scoreobj.write();
         this.gameContext.font="30px Comic Sans MS";
         this.gameContext.fillStyle = "blue";
         this.gameContext.textAlign = "center";
@@ -142,7 +153,7 @@ var gameArea =
         document.getElementById("finalVideo").src = "slowclap.mp4";
         clearInterval(interval);
         document.getElementById("time").innerHTML = "Replay";       //???
-        document.getElementById("gameCanvas").onclick = function(){startGame()};
+        document.getElementById("gameCanvas").onclick = function(){restartGame()};
     },
 
     draw: function ()
@@ -180,7 +191,7 @@ function updateGameArea()
     if (play){
         gameArea.clear();
         gameArea.draw();
-        score.update();
+        scoreobj.update();
         document.getElementById("time").innerHTML = timeCount;
     }
 }
@@ -191,7 +202,7 @@ function pause()
     if (play)
     {
         fruitTimeOut = setTimeout(generateFruit, 10*Math.random()*1000);
-        count = setInterval(function(){timeCount += 1; score.notify("second")}, 1000)
+        count = setInterval(function(){timeCount += 1; scoreobj.notify("second")}, 1000)
         document.getElementById("pacmanmusic").play();
     } else 
     {
@@ -562,29 +573,28 @@ var pacMan =
 
 }
 
-var score = 
-{
-    score: 0,
-    w: undefined,
+score = 0;
+w = undefined;
 
+var scoreobj = 
+{
     reset: function()
     {
-        this.score = 0;
+        score = 0;
     },
 
     update: function()
     {
-        document.getElementById("score").innerHTML = this.score;
+        document.getElementById("score").innerHTML = score;
     },
 
     startWorker: function () {
         if(typeof(Worker) !== "undefined") {
-            if(typeof(this.w) == "undefined") {
-                this.w = new Worker("scoreworker.js");
+            if(typeof(w) == "undefined") {
+                w = new Worker("scoreworker.js");
             }
-            this.w.onmessage = function(event) {
-                //document.getElementById("score").innerHTML = event.data;
-                this.score = event.data;
+            w.onmessage = function(event) {
+                score = event.data;
             };
         } else {
             document.getElementById("score").innerHTML = "Sorry, your browser does not support Web Workers...";
@@ -592,13 +602,13 @@ var score =
     },
 
     stopWorker: function () { 
-        this.w.terminate();
-        this.w = undefined;
+        w.terminate();
+        w = undefined;
     },
 
     notify: function(id)
     {
-        this.w.postMessage(id);
+        w.postMessage(id);
     },
 
     store: function(record)
@@ -607,14 +617,9 @@ var score =
             if((localStorage.getItem("alltimerecord")<record)||localStorage.getItem("alltimerecord"==undefined)){
                 localStorage.alltimerecord = record;
             }
-            if(sessionStorage.getItem("record")!=undefined){
-                if(sessionStorage.getItem("record")<record)
-                {
-                    sessionStorage.record = record;
-                }
-            } else 
+            if((sessionStorage.getItem("sessionrecord")==undefined)||(sessionStorage.getItem("sessionrecord")<record))
             {
-                sessionStorage.record = record;
+                sessionStorage.sessionrecord = record;
             }
         } else {
             window.alert("Your browser does not support session storage. Your records will not be saved")
@@ -624,18 +629,18 @@ var score =
     write: function()
     {
         if(typeof(Storage) !== "undefined") {
-            if(localStorage.getItem("alltimerecord") != undefined){
+            if(localStorage.alltimerecord){
                 document.getElementById("alltimerecord").innerHTML = localStorage.getItem("alltimerecord");
             } else {
                 document.getElementById("alltimerecord").innerHTML = 0;
             }
-            if(sessionStorage.getItem("record") != undefined){
+            if(sessionStorage.sessionrecord){
                 document.getElementById("sessionrecord").innerHTML = sessionStorage.getItem("sessionrecord");
             } else {
                 document.getElementById("sessionrecord").innerHTML = 0;
             }
             
-           document.getElementById("lastscore").innerHTML = this.score;
+           document.getElementById("lastscore").innerHTML = score;
         }
     }
 }
@@ -769,7 +774,7 @@ function drop(ev) {
     MAXTIME = 60;
     fruitCount = 0;
 
-    MAP = [
+    DEFAULT_MAP = [
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 	[0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0],
 	[0, 4, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0, 4, 0],

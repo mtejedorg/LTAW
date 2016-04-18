@@ -1,4 +1,4 @@
-var score = 0;
+var score = parseInt(0);
 var finish = false;
 var timeRemaining = 60;
 var totalScore = 0;
@@ -8,7 +8,7 @@ onmessage = function (event)
     switch (event.data.toLowerCase())
     {
         case "pill":
-            score = parseInt(score) + parseInt(1);
+            score += 1;
             break;
         case "bigpill":
         case "biscuit":
