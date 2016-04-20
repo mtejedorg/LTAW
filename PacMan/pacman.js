@@ -1,8 +1,9 @@
 function startGame ()
 {
-    MAP = DEFAULT_MAP.slice();
+    var map = copyArray(DEFAULT_MAP);
+    //var map = DEFAULT_MAP.slice();
     gameArea.create();
-    gameArea.init(MAP);     //???
+    gameArea.init(map);     //???
     drawPacManColorOptions();
     interval = setInterval(updateGameArea, 20);
     timeCount = 0;
@@ -13,9 +14,9 @@ function startGame ()
 
 function restartGame ()
 {
-    MAP = DEFAULT_MAP.slice();
+    var map = copyArray(DEFAULT_MAP);
     window.alert(DEFAULT_MAP);
-    gameArea.init(MAP);     //???
+    gameArea.init(map);     //???
     timeCount = 0;
     document.getElementById("time").innerHTML = timeCount;
     document.getElementById("finalVideo").src = "";
@@ -23,6 +24,13 @@ function restartGame ()
     scoreobj.write();
     pause();        //???
     document.getElementById("gameCanvas").onclick = function(){pause()};
+}
+
+function copyArray(foo) {
+    for ( var i = 0, l = foo.length, bar = []; i < l; i++ ) {
+       bar[ i ] = foo[ i ];
+    }
+    return bar;
 }
 
 var fruitTimeOut;
@@ -772,8 +780,6 @@ function drop(ev) {
     MAXFRUITCOUNT = 4;
     MAXTIME = 60;
     fruitCount = 0;
-
-    var MAP;
 
     DEFAULT_MAP = [
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
