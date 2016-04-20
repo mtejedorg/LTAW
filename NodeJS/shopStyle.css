@@ -11,42 +11,45 @@ h1{
 	margin: auto;
 	width: 80%;
 	background-color: white;
+	padding: 0;
 }
 
 header{
 	background-color: blue;
 	color: white;
 	font-size: 150%;
-	clear: both;
 }
 
 section{
-	padding: 5%;
-	width: 60%;
-	clear: right;
+	padding: 0;
+	width: 80%;
+	margin: 0;
+	display: block;
+	clear: none;
+	float: right;
 }
 
-section div.item p {
+div.item p {
 	text-align: center;
 }
 
 section table {
-	width: 60%;
-	border: 1px solid black;
+	width: 100%;
 	margin: 0;
 	padding: 0;
+	clear: none;
 }
 
 section table tr, section table td {
 	margin: 0;
 	padding: 2px;
-	width: 100%;
 }
 
 aside{
 	float: left;
-	border: 1px solid black;
-	clear: left;
+	display: block;
+	width: 18%;
+	clear: none;
 }
 
 footer{
@@ -61,12 +64,13 @@ div#menu{
 }
 
 img.itemimg {
-	width: 200px;
+	width: 100%;
 }
 
 ul {
     padding: 0;
     text-align: right;
+    clear: none;
 }
 
 ul li {
