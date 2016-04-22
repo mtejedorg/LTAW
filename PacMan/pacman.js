@@ -1,28 +1,28 @@
 function startGame ()
 {
-    var map = copyArray(DEFAULT_MAP);
-    //var map = DEFAULT_MAP.slice();
+	var aux = JSON.stringify(DEFAULT_MAP)
+    var map = JSON.parse(aux);
     gameArea.create();
-    gameArea.init(map);     //???
+    gameArea.init(map);
     drawPacManColorOptions();
     interval = setInterval(updateGameArea, 20);
     timeCount = 0;
     scoreobj.startWorker();
-    pause();        //???
+    pause();
     document.getElementById("gameCanvas").onclick = function(){pause()};
 }
 
 function restartGame ()
 {
-    var map = copyArray(DEFAULT_MAP);
-    window.alert(DEFAULT_MAP);
-    gameArea.init(map);     //???
+	var aux = JSON.stringify(DEFAULT_MAP)
+    var map = JSON.parse(aux);
+    gameArea.init(map);     
     timeCount = 0;
     document.getElementById("time").innerHTML = timeCount;
     document.getElementById("finalVideo").src = "";
     scoreobj.notify("reset");
     scoreobj.write();
-    pause();        //???
+    pause();
     document.getElementById("gameCanvas").onclick = function(){pause()};
 }
 
