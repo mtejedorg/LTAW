@@ -8,6 +8,7 @@ function startGame ()
     interval = setInterval(updateGameArea, 20);
     timeCount = 0;
     scoreobj.startWorker();
+    scoreobj.write();
     pause();
     document.getElementById("gameCanvas").onclick = function(){pause()};
 }
@@ -93,7 +94,7 @@ var gameArea =
                 this.map[y][x] = 2;
                 pacMan.close = true;
                 document.getElementById("coinsound").load();
-                document.getElementById("coinsound").currentTime = 0,5;
+                document.getElementById("coinsound").currentTime = 0.1;
                 document.getElementById("coinsound").play();
                 break;
             case 4:
@@ -101,7 +102,7 @@ var gameArea =
                 this.map[y][x] = 2;
                 pacMan.close = true;
                 document.getElementById("coinsound").load();
-                document.getElementById("coinsound").currentTime = 0,5;
+                document.getElementById("coinsound").currentTime = 0.1;
                 document.getElementById("coinsound").play();
                 break;
             case 5:
@@ -138,6 +139,7 @@ var gameArea =
     {
         scoreobj.store(score);
         scoreobj.write();
+        scoreobj.update();
         this.gameContext.font="30px Comic Sans MS";
         this.gameContext.fillStyle = "blue";
         this.gameContext.textAlign = "center";
@@ -153,14 +155,14 @@ var gameArea =
         scoreobj.notify("finish");
         scoreobj.store(score);
         scoreobj.write();
+        scoreobj.update();
         this.gameContext.font="30px Comic Sans MS";
         this.gameContext.fillStyle = "blue";
         this.gameContext.textAlign = "center";
         this.gameContext.fillText("You Won!!", this.gameCanvas.width/2, this.gameCanvas.height/2);
         this.gameContext.fillText("Press to replay", this.gameCanvas.width/2, 3*this.gameCanvas.height/4);
         document.getElementById("finalVideo").src = "slowclap.mp4";
-        document.getElementById("time").innerHTML = "Replay?";       //???
-        window.alert(document.getElementById("time").innerHTML);
+        document.getElementById("time").innerHTML = "Replay?";
         document.getElementById("gameCanvas").onclick = function(){restartGame()};
     },
 
