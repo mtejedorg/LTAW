@@ -137,9 +137,9 @@ var gameArea =
 
     endGame: function()
     {
-        scoreobj.store(score);
-        scoreobj.write();
         scoreobj.update();
+        scoreobj.store();
+        scoreobj.write();
         this.gameContext.font="30px Comic Sans MS";
         this.gameContext.fillStyle = "blue";
         this.gameContext.textAlign = "center";
@@ -153,9 +153,9 @@ var gameArea =
     winGame: function()
     {
         scoreobj.notify("finish");
-        scoreobj.store(score);
-        scoreobj.write();
         scoreobj.update();
+        scoreobj.store();
+        scoreobj.write();
         this.gameContext.font="30px Comic Sans MS";
         this.gameContext.fillStyle = "blue";
         this.gameContext.textAlign = "center";
@@ -620,15 +620,15 @@ var scoreobj =
         w.postMessage(id);
     },
 
-    store: function(record)
+    store: function()
     {
         if(typeof(Storage) !== "undefined") {
-            if((localStorage.getItem("alltimerecord")<record)||localStorage.getItem("alltimerecord"==undefined)){
-                localStorage.alltimerecord = record;
+            if((localStorage.getItem("alltimerecord")<score)||localStorage.getItem("alltimerecord"==undefined)){
+                localStorage.alltimerecord = score;
             }
-            if((sessionStorage.getItem("sessionrecord")==undefined)||(sessionStorage.getItem("sessionrecord")<record))
+            if((sessionStorage.getItem("sessionrecord")==undefined)||(sessionStorage.getItem("sessionrecord")<score))
             {
-                sessionStorage.sessionrecord = record;
+                sessionStorage.sessionrecord = score;
             }
         } else {
             window.alert("Your browser does not support session storage. Your records will not be saved")

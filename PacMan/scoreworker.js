@@ -26,6 +26,7 @@ onmessage = function (event)
         case "reset":
             score = 0;
             timeRemaining = 60;
+            finish = false;
             break;
     }
     if (finish)
