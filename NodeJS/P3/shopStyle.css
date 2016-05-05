@@ -112,3 +112,7 @@ ul#options li {
 ul#options li a {
     border-radius: 0 4px 4px 0;
 }
+
+img#final {
+    width:  100%;
+}
