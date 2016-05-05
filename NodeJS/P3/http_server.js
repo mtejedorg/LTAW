@@ -22,7 +22,8 @@ var http = require("http"),
             ".mp4":     "video/mp4",
             ".webm":    "video/webm",
             ".ogg":     "video/ogg",
-            ".mp3":     "audio/mp3"
+            ".mp3":     "audio/mp3",
+            ".wma":     "audio/wma"
         };
 
         /* Checks if filename exists and launches callback with result */
