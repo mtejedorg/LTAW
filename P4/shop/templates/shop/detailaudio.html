@@ -1,0 +1,19 @@
+{% extends base.html %}
+
+{% block aside %}
+	<ul id="options">
+		{% for genre in genre_list %}
+		<li><a href="{% url 'shop:genre' genre.id %}"> {% genre.genre_text %} </a></li>
+		{% endfor %}
+	</ul>
+{% endblock %}
+
+{% block optional %}
+    <audio controls autoplay>
+        <source src="{% static 'shop/audios' item.audiosrc %}" type="audio/mpeg">
+    </audio>
+{% endblock %}
+
+{% block section %}
+    <img id="final" src="{% static 'shop/images' item.imgsrc %}" alt="missing image">
+{% endblock %}

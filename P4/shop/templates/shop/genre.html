@@ -1,0 +1,38 @@
+{% extends base.html %}
+
+{% block aside %}
+    <ul id="options">
+        {% for genre in genre_list %}
+        <li><a href="{% url 'shop:item' item.id %}">{% item.item_text %}</a></li>
+        {% endfor %}
+    </ul>
+{% endblock %}
+
+{% block optional %}
+{% if item.audio %}
+    <audio controls autoplay>
+        <source src="{% static 'shop/audios' genre.audiosrc %}" type="audio/mpeg">
+    </audio>
+{% end if %}
+{% endblock %}
+
+{% block section %}
+    <table>
+        {% for genre in genre_list %}
+        {% if forloop.counter % 2 == 0}
+        <tr>
+        {% endif %}
+            <td>
+                <div class="item">
+                    <a href = "{% url 'shop:genre' genre.id %}">
+                        <img class="itemimg" src="{% static 'shop/images' item.imgsrc %}" alt="missing image">
+                    </a>
+                    <p> {% item.item_text %} </p>
+                </div>
+            </td>
+        {% if forloop.counter % 2 == 0}
+        </tr>
+        {% endif %}
+        {% endfor %}
+    </table>
+{% endblock %}

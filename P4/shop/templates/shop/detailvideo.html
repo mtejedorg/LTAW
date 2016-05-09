@@ -1,0 +1,16 @@
+{% extends base.html %}
+
+{% block aside %}
+	<ul id="options">
+		{% for genre in genre_list %}
+		<li><a href="{% url 'shop:genre' genre.id %}"> {% genre.genre_text %} </a></li>
+		{% endfor %}
+	</ul>
+{% endblock %}
+
+{% block section %}
+    <video id="final" autoplay controls>
+        <source src="{% static 'shop/videos' item.videosrc %}" type="video/mp4">
+    </video>
+{% endblock %}
+

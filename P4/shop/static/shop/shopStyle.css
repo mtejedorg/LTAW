@@ -1,0 +1,120 @@
+body{
+	background-color: lightgray;
+}
+
+h1{
+	text-align: center;
+}
+
+h1 a {
+    color:  white;
+}
+
+#page{
+	display: block;
+	margin: auto;
+	width: 80%;
+	background-color: white;
+	padding: 0;
+}
+
+header{
+	background-color: blue;
+	color: white;
+	font-size: 150%;
+}
+
+section{
+	padding: 0;
+	width: 80%;
+	margin: 0;
+	display: block;
+	clear: none;
+	float: right;
+}
+
+div.item p {
+	text-align: center;
+}
+
+section table {
+	width: 100%;
+	margin: 0;
+	padding: 0;
+	clear: none;
+}
+
+section table tr, section table td {
+	margin: 0;
+	padding: 2px;
+}
+
+aside{
+	float: left;
+	display: block;
+	width: 18%;
+	clear: none;
+}
+
+footer{
+	background-color: black;
+	height: 2cm;
+	clear: both;
+}
+
+div#menu{
+	background-color: lightgray;
+	border: 1 px solid black;
+}
+
+img.itemimg {
+	width: 100%;
+}
+
+ul {
+    padding: 0;
+    text-align: right;
+    clear: none;
+}
+
+ul li {
+	height: 1.5cm;
+}
+
+ul#menu li {
+    display: inline;
+}
+
+ul li a {
+    background-color: black;
+    color: white;
+    padding: 10px 20px;
+    text-decoration: none;
+    text-align: center;
+}
+
+ul li a:hover {
+    background-color: red;
+}
+
+ul#menu li a {
+    border-radius: 4px 4px 0 0;
+}
+
+ul#options{
+	margin-top: 1cm;
+}
+
+ul#options li {
+    display: block;
+}
+
+ul#options li a {
+    border-radius: 0 4px 4px 0;
+}
+
+#final {
+    width:  100%;
+}
+
+

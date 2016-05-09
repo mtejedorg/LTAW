@@ -1,0 +1,30 @@
+{% extends base.html %}
+
+{% block aside %}
+	<ul id="options">
+		{% for genre in genre_list %}
+		<li><a href="{% url 'shop:genre' genre.id %}"> {% genre.genre_text %} </a></li>
+		{% endfor %}
+	</ul>
+{% endblock %}
+
+{% block section %}
+	<table>
+		{% for genre in genre_list %}
+		{% if forloop.counter % 2 == 0}
+		<tr>
+		{% endif %}
+			<td>
+				<div class="item">
+					<a href = "{% url 'shop:genre' genre.id %}">
+						<img class="itemimg" src="{% static 'shop/images' genre.imgsrc %}" alt="missing image">
+					</a>
+					<p> {% genre.genre_text %} </p>
+				</div>
+			</td>
+		{% if forloop.counter % 2 == 0}
+		</tr>
+		{% endif %}
+		{% endfor %}
+	</table>
+{% endblock %}

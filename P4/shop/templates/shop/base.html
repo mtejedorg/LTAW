@@ -1,0 +1,35 @@
+{% load staticfiles %}
+
+<html lang="es">
+	<head>
+        <meta charset="utf-8" />
+		<link rel="stylesheet" type="text/css" href="{% static 'polls/style.css' %}">
+        <title>Tienda Online</title>
+	</head>
+	<body>
+		<div id="page">
+			<header>
+				<h1><a href="index.html">Tiendachachiguachi.net</a></h1>
+				<div id = "divmenu">
+					<ul id="menu">
+						{% for genre in genre_list %}
+						<li><a href="{% url 'shop:genre' genre.id %}">{% genre.genre_text %}</a></li>
+						{% endfor %}
+					</ul>
+				</div>
+			</header>
+			<aside>
+				{% block aside %}
+                {% endblock %}
+			</aside>
+                {% block optional %}
+                {% endblock %}
+			<section>
+				{% block section %}
+                {% endblock %}
+			</section>
+			<footer>
+			</footer>
+		</div>
+	</body>
+</html>
