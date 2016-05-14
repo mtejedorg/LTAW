@@ -3,17 +3,17 @@
 <html lang="es">
 	<head>
         <meta charset="utf-8" />
-		<link rel="stylesheet" type="text/css" href="{% static 'polls/style.css' %}">
+		<link rel="stylesheet" type="text/css" href="{% static 'shop/shopStyle.css' %}">
         <title>Tienda Online</title>
 	</head>
 	<body>
 		<div id="page">
 			<header>
-				<h1><a href="index.html">Tiendachachiguachi.net</a></h1>
+				<h1><a href="{% url 'shop:index' %}">Tiendachachiguachi.net</a></h1>
 				<div id = "divmenu">
 					<ul id="menu">
 						{% for genre in genre_list %}
-						<li><a href="{% url 'shop:genre' genre.id %}">{% genre.genre_text %}</a></li>
+						<li><a href="{% url 'shop:genre' genre.id %}">{{ genre.text }}</a></li>
 						{% endfor %}
 					</ul>
 				</div>

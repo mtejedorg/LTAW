@@ -1,0 +1,31 @@
+{% extends "shop/base.html" %}
+
+{% load staticfiles %}
+
+{% block aside %}
+	<ul id="options">
+		{% for genre in genre_list %}
+		<li><a href="{% url 'shop:genre' genre.id %}"> {{ genre.text }} </a></li>
+		{% endfor %}
+	</ul>
+{% endblock %}
+
+{% block optional %}
+{% if item.audiosrc %}
+    <audio controls autoplay>
+        <source src="{{item.audiosrc.url}}" type="audio/mpeg">
+    </audio>
+{% endif %}
+{% endblock %}
+
+{% block section %}
+{% if item.videosrc %}
+    <video id="final" autoplay controls>
+        <source src="{{ item.videosrc.url }}" type="video/mp4">
+    </video>
+{% elif item.detailImgsrc %}
+    <img id="final" src="{{ item.detailImgsrc.url }}" alt="missing image">
+{% else %}
+   <img id="final" src="{{ item.imgsrc.url }}" alt="missing image">
+{% endif %}
+{% endblock %}
