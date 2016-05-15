@@ -19,6 +19,10 @@
 				</div>
 			</header>
 			<aside>
+				<form action="{% url 'shop:search' %}" method="get">
+					<input id="searchbox" type="text" name="searchbox" placeholder="Search..."><br>
+					<input type="submit" value="Search">
+				</form>
 				{% block aside %}
                 {% endblock %}
 			</aside>

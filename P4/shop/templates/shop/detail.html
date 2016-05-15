@@ -16,6 +16,20 @@
         <source src="{{item.audiosrc.url}}" type="audio/mpeg">
     </audio>
 {% endif %}
+    <div id="price">
+        <p><strong>Price:{{item.price}}$</strong>
+            <a href="{% url 'shop:cart' item.id %}">
+                <button style="margin-left:10px">
+                    {% if item.inCart %}
+                        Delete from cart
+                    {% else %}
+                        Add to cart
+                    {% endif %}
+                </button>
+            </a>
+        </p>
+    </div>
+
 {% endblock %}
 
 {% block section %}

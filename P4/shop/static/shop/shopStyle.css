@@ -24,6 +24,18 @@ header{
 	font-size: 150%;
 }
 
+audio{
+    margin-left: 2%;
+}
+
+#searchbox{
+    width: 100%;
+}
+
+#price{
+    float:right
+}
+
 section{
 	padding: 0;
 	width: 80%;

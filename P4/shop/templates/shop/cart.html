@@ -1,0 +1,39 @@
+{% extends "shop/base.html" %}
+
+{% load staticfiles %}
+
+{% block aside %}
+	<ul id="options">
+		{% for genre in genre_list %}
+		<li><a href="{% url 'shop:genre' genre.id %}"> {{ genre.text }} </a></li>
+		{% endfor %}
+	</ul>
+{% endblock %}
+
+{% block section %}
+	<table>
+		{% for item in item_list %}
+		{% if not forloop.counter|divisibleby:2 %}
+		<tr>
+		{% endif %}
+			<td>
+				<div class="item">
+					<a href = "{% url 'shop:item' 'detail' item.id %}">
+						<img class="itemimg" src="{{item.imgsrc.url}}" alt="missing image">
+					</a>
+					<p> {{ item.text }} </p>
+				</div>
+			</td>
+		{% if forloop.counter|divisibleby:2 %}
+		</tr>
+		{% endif %}
+		{% endfor %}
+	</table>
+    <p><strong>Order ready!! Total price: {{total}}$</strong></p>
+    <form action="{% url 'shop:index' %}" method="post">
+	{% csrf_token %}
+		<label>Mail:</label><input type="text" name="mail" placeholder="example@example.com"><br>
+		<label>Dirección</label><input type="text" name="dir" placeholder="c/Falsa 123"><br>
+        <input type="submit" value="Buy!">
+	</form>
+{% endblock %}

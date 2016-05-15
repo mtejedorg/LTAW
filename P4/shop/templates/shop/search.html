@@ -1,0 +1,32 @@
+{% extends "shop/base.html" %}
+
+{% load staticfiles %}
+
+{% block aside %}
+    <ul id="options">
+        {% for item in item_list %}
+        <li><a href="{% url 'shop:item' 'search' item.id %}">{{ item.text }}</a></li>
+        {% endfor %}
+    </ul>
+{% endblock %}
+
+{% block section %}
+    <table>
+        {% for item in item_list %}
+        {% if not forloop.counter|divisibleby:2 %}
+        <tr>
+        {% endif %}
+            <td>
+                <div class="item">
+                    <a href = "{% url 'shop:item' 'search' item.id %}">
+                        <img class="itemimg" src="{{item.imgsrc.url}}" alt="missing image">
+                    </a>
+                    <p> {{ item.text }} </p>
+                </div>
+            </td>
+        {% if forloop.counter|divisibleby:2 %}
+        </tr>
+        {% endif %}
+        {% endfor %}
+    </table>
+{% endblock %}
