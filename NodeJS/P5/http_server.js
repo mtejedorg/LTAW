@@ -3,11 +3,13 @@ var http = require("http"),
     path = require("path"),
     fs = require("fs"),
     media = require("./media"),
+    form = require("./form"),
     port = process.argv[2] || 8888;
 
     http.createServer(function (request, response)
     {
-
+		form.form(request, response)
+		
         var uri = url.parse(request.url).pathname
     , filename = path.join(process.cwd(), uri); 	//String join actual directory plus pathname
 
@@ -37,7 +39,7 @@ var http = require("http"),
                 return;
             }
 
-            /* If no name is given, returns index.html*/
+            /* If no name is given, returns index.html */
             if (fs.statSync(filename).isDirectory()) filename += '/index.html';
 
             fs.readFile(filename, "binary", function (err, file)
@@ -61,7 +63,7 @@ var http = require("http"),
                     media.media(filename, request, response);
                 } else
 
-                /* Only answers if extension is contemplated */
+                /* Only answers if extension is contemplated*/
                     if (contentType)
                     {
                         headers["Content-Type"] = contentType;
