@@ -4,10 +4,10 @@ var http = require("http"),
     fs = require("fs"),
     media = require("./media"),
     form = require("./form"),
-    port = process.argv[2] || 8888;
+    port = process.argv[2] || 8000;
 
     http.createServer(function (request, response)
-    {
+    {		
 		form.form(request, response)
 		
         var uri = url.parse(request.url).pathname
@@ -76,3 +76,12 @@ var http = require("http"),
     }).listen(parseInt(port, 10));
 
 console.log("Static file server running at\n  => http://localhost:" + port + "/\nCTRL + C to shutdown");
+console.log();
+console.log("Press Join in the index to test the form");
+console.log();
+console.log("Change 'post' in form.js line 55 to 'all' if you want more debug")
+console.log();
+console.log("Change 'method' in form.html line 3 to 'get' if you want to try it")
+console.log();
+console.log();
+

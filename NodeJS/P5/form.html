@@ -1,16 +1,70 @@
 <html>
    <body>
-      <form action="" method="post">
+      <form action="/results/" method="post">
          <fieldset>
             <label for="name">Name:</label>
             <input type="text" id="name" name="name" placeholder="Enter your full name" />
             <br />
+            
             <label for="email">Email:</label>
             <input type="text" id="email" name="email" placeholder="Enter your email address" />
             <br />
+            
+            <label for="phone">Telephone:</label>
+            <input type="tel" name="phone">
+            <br />
+            
             <label for="description">Description:</label>
             <textarea id="description" name="description" placeholder="Enter a short description about yourself"></textarea>
             <br />
+            
+			<label for="sex">Sex:</label>
+			<input list="sexs" name="sex">
+			<datalist id="sexs">
+				<option value="male">
+				<option value="female">
+				<option value="other">
+			</datalist>
+			<br /><br />
+			
+			<label for="confirmsex">Confirm sex:</label><br>
+			<input type="radio" name="gender" value="male">Male<br>
+			<input type="radio" name="gender" value="female">Female<br>
+			<input type="radio" name="gender" value="other">Other<br>
+			<br />
+			
+			<input type="checkbox" name="terms" value="accept">I accept the terms<br>
+			<br />
+			  
+			<label for="encryption">Encryption:</label>
+			<keygen name="security">
+			<br /><br />
+			 
+			<label for="age">Age:</label>
+			<input type="number" id="age" name="age" value="50" min="18" max="150">
+			<br />
+			
+			<label for="birthday">Birthday:</label>
+			<input type="date" name="birthday" placeholder="yyyy-mm-dd" max="1999-1-1">
+			<br />
+			
+			<label for="colors">Select your favorite color:</label>
+			<input type="color" name="favcolor" value="#000000"><br>
+			<br />
+			
+			<label for="polytics">How much u care about polytics?</label><br>
+			I don't care <input type="range" name="polytics" min="0" max="100"> I care a lot <br>
+			<br />
+			 
+			<label for="happyness">How happy are yow?:</label><br>
+			Super-sad<input type="range" name="happyness" min="0" max="100">Super-happy<br>
+			<br />
+			
+			<label for="confirmhappyness">So you are?:</label><br>
+			<input type="radio" name="confirmhappyness" value="happy">Happy<br>
+			<input type="radio" name="confirmhappyness" value="sad">Sad<br>
+			<br />
+			 
             <input type="submit" value="Join" />
          </fieldset>
       </form>

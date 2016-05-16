@@ -3,7 +3,6 @@ var http = require("http"),
     
 function log(request, body, methods){
 	method = request.method;
-	//console.log("Message received: " + method)
 	if(methods.toLowerCase() == method.toLowerCase() || methods.toLowerCase() == "all"){
 		console.log(">>> Method: " + method);
 		url = request.url;
