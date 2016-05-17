@@ -1,6 +1,5 @@
 var http = require("http"),
     url = require("url"),
-    logger = require("./logger"),
     querystring = require('querystring');
     
 function isform(request){
@@ -47,17 +46,11 @@ function proc(request, response, bodyfields){
 	response.end(); 
 }
     
-function form(request, response){
-	var body = "";
-	request.on('data', function(data) {
-		body += data;
-	}).on('end', function() {
-		logger.log(request, body, "post");
-		if(isform(request)){
-			var parsedBody= querystring.parse(body)
-			proc(request, response, parsedBody);
-		}
-	});
+function form(request, response, body){
+	if(isform(request)){
+		var parsedBody= querystring.parse(body)
+		proc(request, response, parsedBody);
+	}
 }
 
 exports.form = form;
