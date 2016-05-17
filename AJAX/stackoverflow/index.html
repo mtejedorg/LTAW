@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Ajax example</title>
+        <script type="application/javascript">
+            function newGame()
+            {
+               guessCnt=0;
+               guess="";
+               server();
+               displayHash();
+               displayGuessStr();
+               displayGuessCnt();
+            }
+
+            function server()
+            {
+               window.alert("request recieved");
+               xmlhttp = new XMLHttpRequest();
+               xmlhttp.open("GET","http://localhost:8001/getstring", true);
+               xmlhttp.onreadystatechange=function(){
+                     if (xmlhttp.readyState==4 && xmlhttp.status==200){
+                       string=xmlhttp.responseText;
+                       window.alert(string);
+                     }
+               }
+               xmlhttp.send();
+            }
+        </script>
+    </head>
+    <body>
+    <form name="myForm">
+        Name: <input type="text" onkeyup="server()" name="username" />
+    <br />
+    Time: <textarea name="time" cols="40" rows="10"></textarea>
+    </form>
+    </body>
+</html>
