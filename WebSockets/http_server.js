@@ -1,9 +1,10 @@
-var http = require("http"),
+var http = require("http").Server(app),
     url = require("url"),
     path = require("path"),
     fs = require("fs"),
     media = require("./media"),
     form = require("./form"),
+    io = require('socket.io')(http),
     port = process.argv[2] || 3000;
 
     http.createServer(function (request, response)
