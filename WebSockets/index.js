@@ -23,7 +23,8 @@ io.on('connection', function (socket) {
         console.log('user disconnected');
     });
   //socket.emit('news', { hello: 'world' });
-  //socket.on('my other event', function (data) {
-  //  console.log(data);
-  //});
+    socket.on('chat message', function(msg){
+        //socket.broadcast.emit('chat message', msg);
+        io.emit('chat message', msg);
+    });
 });
