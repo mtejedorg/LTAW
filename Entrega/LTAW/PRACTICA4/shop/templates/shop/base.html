@@ -1,0 +1,39 @@
+{% load staticfiles %}
+
+<html lang="es">
+	<head>
+        <meta charset="utf-8" />
+		<link rel="stylesheet" type="text/css" href="{% static 'shop/shopStyle.css' %}">
+        <title>Tienda Online</title>
+	</head>
+	<body>
+		<div id="page">
+			<header>
+				<h1><a href="{% url 'shop:index' %}">Tiendachachiguachi.net</a></h1>
+				<div id = "divmenu">
+					<ul id="menu">
+						{% for genre in genre_list %}
+						<li><a href="{% url 'shop:genre' genre.id %}">{{ genre.text }}</a></li>
+						{% endfor %}
+					</ul>
+				</div>
+			</header>
+			<aside>
+				<form action="{% url 'shop:search' %}" method="get">
+					<input id="searchbox" type="text" name="searchbox" placeholder="Search..."><br>
+					<input type="submit" value="Search">
+				</form>
+				{% block aside %}
+                {% endblock %}
+			</aside>
+                {% block optional %}
+                {% endblock %}
+			<section>
+				{% block section %}
+                {% endblock %}
+			</section>
+			<footer>
+			</footer>
+		</div>
+	</body>
+</html>

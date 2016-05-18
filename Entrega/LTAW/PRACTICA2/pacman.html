@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" charset="utf-8" />
+        <link rel="stylesheet" href="pmStyle.css">
+        <title>El Juego del Comecocos</title>
+    </head>
+    <body onload="startGame()">
+        <script src="pacman.js"></script>
+        <header> <h1>PacMan</h1><h3>By Marco Tejedor</h3></header>
+        <div id="info">
+            <p id="time" onclick="pause()">Play Game?</p>
+            <p>Last Score: <span id="lastscore">0</span></p>
+            <p>Today record:<span id="sessionrecord">0</span></p>
+            <p>All-time record:<span id="alltimerecord">0</span></p>
+        </div>
+        <div id="videos">
+            <video id="finalVideo" width="300" autoplay></video>
+        </div>
+        <div id="gameArea">
+            <canvas id="gameCanvas" ondrop="drop(event)" ondragover="allowDrop(event)" onclick="pause()">No es posible cargar el juego</canvas>
+            <p id="scoretext">Score:<span id="score">0</span></p>
+            <audio id="coinsound">
+                <source src="beep.mp3" type="audio/mpeg">
+            </audio>
+            <audio id="pacmanmusic" loop>
+                <source src="pacmanmusic.mp3" type="audio/mpeg">
+            </audio>
+            <table id="interface"><tr>
+                <td><canvas id="yellow" draggable ="true" ondragstart="drag(event)" class="pacManColorOption">Bad ID</canvas></td>
+                <td><canvas id="red" draggable ="true" ondragstart="drag(event)" class="pacManColorOption">Bad ID</canvas></td>
+                <td><canvas id="green" draggable ="true" ondragstart="drag(event)" class="pacManColorOption">Bad ID</canvas></td>
+            </tr></table>
+        </div>
+        <div id = "default_map"></div>
+        <footer><h5><strong>GitHub:</strong><a href="https://github.com/mtejedorg" target="blank">https://github.com/mtejedorg</a></h5></footer>
+    </body>
+</html>

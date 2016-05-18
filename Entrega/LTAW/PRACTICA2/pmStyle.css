@@ -1,0 +1,56 @@
+body {
+    background-color: black;
+}
+
+header {
+    color:  yellow;
+    font-family:  'Comic Sans MS';
+    text-align: center;
+}
+
+h1 {
+    font-size: 300%;
+}
+
+#info {
+    float:  left;
+    text-align:  left;
+    margin-left: 5%;
+    color:  yellow;
+    font-family:  'Comic Sans MS';
+    font-size: 200%;
+}
+
+#gameArea {
+    width: 30%;
+    background-color:  #111111;
+    display: block;
+    margin: auto;
+    border: 1px solid #808080;
+}
+
+#gameCanvas {
+    border: 1px solid #808080;
+    background-color: black;
+    display: block;
+    margin: auto;
+}
+
+#videos {
+    float:  right;
+}
+
+#scoretext {
+    float: right;
+    color: yellow;
+    font-size: 200%;
+    font-family: 'Franklin Gothic';
+    display: block;
+    margin: 5%;
+}
+
+.pacManColorOption{
+    border: 1px solid #333333;
+    width: 50px;
+    height:  50px;
+}
