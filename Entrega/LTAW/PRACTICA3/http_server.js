@@ -13,7 +13,7 @@ var http = require("http"),
 
         var contentTypesByExtension = {
             '.html':    "text/html",
-            '.css':     "text/css",
+            '.css':		"text/css",
             '.js':      "text/javascript",
             ".txt":     "text/plain",
             ".jpg":     "image/jpeg",
