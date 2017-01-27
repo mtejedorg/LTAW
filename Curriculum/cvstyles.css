@@ -34,7 +34,7 @@ section {
 aside {
     float: right;
     height: 246mm;
-    width: 84mm;
+    width: 80mm;
     margin: 0px;
     padding: 0px;
 }
@@ -104,7 +104,7 @@ img#principal {
     background-color:  white;
     border: 1px solid black;
     margin: 5mm;
-    margin-top: 8mm;
+    margin-top: 4mm;
     padding: 3.5%;
     padding-top: 6%;
     text-align: justify;
@@ -116,7 +116,7 @@ img#principal {
     color: white;
     border: 1px solid black;
     margin: 5mm;
-    margin-top: 8mm;
+    margin-top: 4mm;
     padding: 3.5%;
     padding-top: 3mm;
     text-align: justify;
