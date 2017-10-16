@@ -19,7 +19,7 @@ header {
     font-family: courier;
     font-size: 150%;
     color: white;
-    height: 23.5mm;
+    height: 18.5mm;
     width: 190mm;
     padding: 10mm;
 }
@@ -44,7 +44,7 @@ footer {
     clear: both;
     font-family: courier;
     color: white;
-    height: 10mm;
+    height: 15mm;
     width: 200mm;
     padding: 5mm;
 }
