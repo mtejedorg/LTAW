@@ -1,0 +1,144 @@
+#cv {
+    background-color: lightgray;
+	background-image: -webkit-gradient(radial, 50% 50%, 0, 50% 50%,800, from(white), to(#333)); 	/*Safari 5.1-6*/
+    background-image: -o-radial-gradient(center 45deg, white, #333); 								/*Opera 11.1-12*/
+    background-image: -moz-radial-gradient(center 45deg,circle cover, white, #333); 				/*Fx 3.6-15*/
+	background-image: radial-gradient(center 45deg,circle cover, white, #333);						/*Standard*/
+    width: 210mm;
+    height: 290mm;
+    margin: auto;
+    padding: 0px;
+}
+
+header {
+    background-color: black; /* For browsers that do not support gradients */
+	background: -webkit-linear-gradient(top left,rgba(0,0,0,1),rgba(0,0,0,0.8),rgba(0,0,0,0)); /*Safari 5.1-6*/
+	background: -o-linear-gradient(top left,rgba(0,0,0,1),rgba(0,0,0,0.8),rgba(0,0,0,0)); /*Opera 11.1-12*/
+	background: -moz-linear-gradient(top left,rgba(0,0,0,1),rgba(0,0,0,0.8),rgba(0,0,0,0)); /*Fx 3.6-15*/
+	background: linear-gradient(to bottom right, rgba(0,0,0,1),rgba(0,0,0,0.8), rgba(0,0,0,0)); /*Standard*/
+    font-family: courier;
+    font-size: 150%;
+    color: white;
+    height: 23.5mm;
+    width: 190mm;
+    padding: 10mm;
+}
+
+section {
+    width: 126mm;
+    height: 226.5mm;
+    margin: 0px;
+    padding: 0px;
+}
+
+aside {
+    float: right;
+    height: 246mm;
+    width: 80mm;
+    margin: 0px;
+    padding: 0px;
+}
+
+footer {
+    background-color: black;
+    clear: both;
+    font-family: courier;
+    color: white;
+    height: 10mm;
+    width: 200mm;
+    padding: 5mm;
+}
+
+h1 {
+    margin: 0px;
+    padding: 0px;
+}
+
+h5 {
+    margin: 0px;
+    padding: 0px;
+}
+
+img#principal {
+    width: 95%;
+    text-align: left;
+    margin: 0px;
+    margin-bottom: 5mm;
+    margin-right: 5mm;
+}
+
+#cartel {
+    background-color: #333333;
+    float:  left;
+    margin: 0px;
+    margin-top: -1.5mm;
+    margin-left: 20%;
+    color: white;
+    font-size: auto;
+    padding: 3px;
+}
+
+#cartel2 {
+    background-color: white;
+    float:  left;
+    margin: 0px;
+    margin-top: -1.5mm;
+    margin-left: 20%;
+    color: #333333;
+    font-size: auto;
+    padding: 3px;
+}
+
+.cartelaside {
+    text-align: left;
+    width: auto;
+    margin: 0px;
+    margin-right: 5mm;
+    color: Darkblue;
+    font-family: Gabriola;
+    font-size: 200%;
+    padding: 3px;
+}
+
+.item {
+    background-color:  white;
+    border: 1px solid black;
+    margin: 5mm;
+    margin-top: 4mm;
+    padding: 3.5%;
+    padding-top: 6%;
+    text-align: justify;
+    font-size: 80%;
+}
+
+.item2 {
+    background-color: #333333;
+    color: white;
+    border: 1px solid black;
+    margin: 5mm;
+    margin-top: 4mm;
+    padding: 3.5%;
+    padding-top: 3mm;
+    text-align: justify;
+    font-size: 80%;
+}
+
+.itemaside {
+    background-color: #333333;
+    color: white;
+    margin: 0px;
+    margin-right: 5mm;
+    padding: 1%;
+    border: 1px solid black;
+    text-align: left;
+}
+
+table, td {
+    border: 1px solid white;
+    border-spacing: 2px;
+}
+
+a:link    {color:white; background-color:transparent; text-decoration:none}
+a:visited {color:white; background-color:transparent; text-decoration:none}
+a:hover   {color:white; background-color:transparent; text-decoration:underline}
+a:active  {color:blue; background-color:transparent; text-decoration:underline}
