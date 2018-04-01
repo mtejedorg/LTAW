@@ -19,7 +19,7 @@ header {
     font-family: courier;
     font-size: 150%;
     color: white;
-    height: 23.5mm;
+    height: 18.5mm;
     width: 190mm;
     padding: 10mm;
 }
@@ -44,7 +44,7 @@ footer {
     clear: both;
     font-family: courier;
     color: white;
-    height: 10mm;
+    height: 15mm;
     width: 200mm;
     padding: 5mm;
 }
@@ -60,10 +60,13 @@ h5 {
 }
 
 img#principal {
-    width: 95%;
+    height: 20%;
     text-align: left;
+    align; center;
     margin: 0px;
-    margin-bottom: 5mm;
+    margin-top: 5mm;
+    margin-left: 18mm;
+    margin-bottom: 0mm;
     margin-right: 5mm;
 }
 
@@ -138,7 +141,7 @@ table, td {
     border-spacing: 2px;
 }
 
-a:link    {color:white; background-color:transparent; text-decoration:none}
-a:visited {color:white; background-color:transparent; text-decoration:none}
-a:hover   {color:white; background-color:transparent; text-decoration:underline}
-a:active  {color:blue; background-color:transparent; text-decoration:underline}
+a:link    {color:white; background-color:transparent; text-decoration:underline}
+a:visited {color:white; background-color:transparent; text-decoration:underline}
+a:hover   {color:blue; background-color:transparent; text-decoration:underline}
+a:active  {color:red; background-color:transparent; text-decoration:underline}
